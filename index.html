@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LegacyX</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -13,63 +13,85 @@
   <div id="tabContainer"></div>
 
   <script>
-    const iosVersions = [4, 5, 6, 7, 8, 9, 10, 11];
-    const tabBar = document.getElementById("tabBar");
-    const tabContainer = document.getElementById("tabContainer");
+    var iosVersions = [4, 5, 6, 7, 8, 9, 10, 11];
+    var tabBar = document.getElementById("tabBar");
+    var tabContainer = document.getElementById("tabContainer");
 
     // Generate tabs and containers
-    iosVersions.forEach((v, idx) => {
-      // Buttons
-      const btn = document.createElement("button");
-      btn.textContent = `iOS ${v}`;
-      btn.className = "tab-link" + (idx === 0 ? " active" : "");
-      btn.onclick = () => showTab(`ios${v}`, btn);
-      tabBar.appendChild(btn);
+    for (var i = 0; i < iosVersions.length; i++) {
+      (function(idx){
+        var v = iosVersions[idx];
+        // Buttons
+        var btn = document.createElement("button");
+        btn.innerHTML = "iOS " + v;
+        btn.className = "tab-link" + (idx === 0 ? " active" : "");
+        btn.onclick = function() {
+          showTab("ios" + v, btn);
+        };
+        tabBar.appendChild(btn);
 
-      // Content container
-      const content = document.createElement("div");
-      content.id = `ios${v}`;
-      content.className = "tab-content" + (idx === 0 ? " active" : "");
-      tabContainer.appendChild(content);
-    });
-
-    function showTab(tabId, button) {
-      document.querySelectorAll(".tab-content").forEach(tab => {
-        tab.classList.remove("active");
-      });
-      document.getElementById(tabId).classList.add("active");
-
-      document.querySelectorAll(".tab-link").forEach(btn => {
-        btn.classList.remove("active");
-      });
-      button.classList.add("active");
+        // Content container
+        var content = document.createElement("div");
+        content.id = "ios" + v;
+        content.className = "tab-content" + (idx === 0 ? " active" : "");
+        tabContainer.appendChild(content);
+      })(i);
     }
 
-    // Load apps.json and generate content
-    fetch("apps.json")
-      .then(res => res.json())
-      .then(apps => {
-        apps.forEach(app => {
-          app.iosVersions.forEach(v => {
-            const tab = document.getElementById(`ios${v}`);
-            if (!tab) return;
+    function showTab(tabId, button) {
+      var tabs = document.getElementsByClassName("tab-content");
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].className = tabs[i].className.replace(" active", "");
+      }
+      var activeTab = document.getElementById(tabId);
+      activeTab.className += " active";
 
-            const card = document.createElement("div");
-            card.className = "app-card";
-            card.innerHTML = `
-              <img src="icons/${app.identifier}.png" class="app-icon" alt="${app.title}">
-              <div class="app-details">
-                <h3>${app.title}</h3>
-                <p>${app.description}</p>
-                <a href="itms-services://?action=download-manifest&url=https://testificate0.github.io/iosstore.github.io/plists/${app.identifier}.plist">
-                  <button class="install-btn">Install</button>
-                </a>
-              </div>
-            `;
-            tab.appendChild(card);
-          });
-        });
-      });
+      var btns = document.getElementsByClassName("tab-link");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].className = btns[i].className.replace(" active", "");
+      }
+      button.className += " active";
+    }
+
+    // Fetch replacement using XMLHttpRequest
+    function fetchAppsJSON(callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "apps.json", true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var apps = JSON.parse(xhr.responseText);
+          callback(apps);
+        }
+      };
+      xhr.send(null);
+    }
+
+    fetchAppsJSON(function(apps) {
+      for (var i = 0; i < apps.length; i++) {
+        var app = apps[i];
+        for (var j = 0; j < app.iosVersions.length; j++) {
+          var v = app.iosVersions[j];
+          var tab = document.getElementById("ios" + v);
+          if (!tab) continue;
+
+          var card = document.createElement("div");
+          card.className = "app-card";
+
+          var innerHTML = 
+            '<img src="icons/' + app.identifier + '.png" class="app-icon" alt="' + app.title + '">' +
+            '<div class="app-details">' +
+              '<h3>' + app.title + '</h3>' +
+              '<p>' + app.description + '</p>' +
+              '<a href="itms-services://?action=download-manifest&url=https://testificate0.github.io/iosstore.github.io/plists/' + app.identifier + '.plist">' +
+                '<button class="install-btn">Install</button>' +
+              '</a>' +
+            '</div>';
+
+          card.innerHTML = innerHTML;
+          tab.appendChild(card);
+        }
+      }
+    });
   </script>
 
 </body>
