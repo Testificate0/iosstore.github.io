@@ -1,14 +1,14 @@
 [
   {
-    "title": "Classic Notes",
-    "description": "A simple note-taking app for iOS 4–6.",
-    "identifier": "classicnotes",
-    "bundleId": "com.example.classicnotes",
+    "title": "Minecraft",
+    "description": "popular sandbox game",
+    "identifier": "minecraft",
+    "bundleId": "com.mojang.minecraft",
     "version": "1.0",
-    "iosVersions": [4, 5, 6],
-    "ipa": "ipas/classicnotes.ipa",
-    "plist": "plists/classicnotes.plist",
-    "icon": "icons/classicnotes.png"
+    "iosVersions": [5, 6, 7],
+    "ipa": "ipas/minecraft.ipa",
+    "plist": "plists/minecraft.plist",
+    "icon": "icons/minecraft.png"
   },
   {
     "title": "Weather Mini",
