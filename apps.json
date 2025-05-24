@@ -17,9 +17,9 @@
     "bundleId": "com.rovio.angrybirds",
     "version": "1.4.4",
     "iosVersions": [5, 6, 7],
-    "ipa": "ipas/weathermini.ipa",
-    "plist": "plists/weathermini.plist",
-    "icon": "icons/weathermini.png"
+    "ipa": "ipas/angrybirds.ipa",
+    "plist": "plists/angrybirds.plist",
+    "icon": "icons/angrybirds.png"
   }
     {
     "title": "Plants vs. Zombies",
@@ -130,5 +130,5 @@
     "ipa": "ipas/flappybird.ipa",
     "plist": "plists/flappybird.plist",
     "icon": "icons/flappybird.png"
-  }z
+  }
 ]
