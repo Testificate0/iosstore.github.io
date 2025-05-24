@@ -1,1 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legacy iOS App Store</title>
+  <style>
+    body {
+      font-family: -apple-system, Helvetica, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .tab-bar {
+      display: flex;
+      justify-content: space-around;
+      background: #f0f0f0;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .tab-bar button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: #f0f0f0;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .tab-bar button.active {
+      background: #ddd;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 20px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .app-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+    }
+
+    .app-icon {
+      width: 100px;
+      height: 100px;
+      background: black;
+    }
+
+    .app-details {
+      flex-grow: 1;
+    }
+
+    .install-btn {
+      margin-top: 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+      background: #007aff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .install-btn:hover {
+      background: #005ecb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tab-bar">
+    <button class="tab-link active" onclick="showTab('ios4')">iOS 4</button>
+    <button class="tab-link" onclick="showTab('ios5')">iOS 5</button>
+    <button class="tab-link" onclick="showTab('ios6')">iOS 6</button>
+    <button class="tab-link" onclick="showTab('ios7')">iOS 7</button>
+    <button class="tab-link" onclick="showTab('ios8')">iOS 8</button>
+    <button class="tab-link" onclick="showTab('ios9')">iOS 9</button>
+    <button class="tab-link" onclick="showTab('ios10')">iOS 10</button>
+    <button class="tab-link" onclick="showTab('ios11')">iOS 11</button>
+  </div>
+
+  <!-- Example tab for iOS 4 -->
+  <div id="ios4" class="tab-content active">
+    <div class="app-card">
+      <img src="icons/classicnotes.png" alt="Classic Notes Icon" class="app-icon">
+      <div class="app-details">
+        <h3>Classic Notes</h3>
+        <p>A simple note-taking app for iOS 4–6.</p>
+        <a href="itms-services://?action=download-manifest&url=https://testificate0.github.io/iosstore.github.io/plists/classicnotes.plist">
+          <button class="install-btn">Install</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty tabs for now -->
+  <div id="ios5" class="tab-content"></div>
+  <div id="ios6" class="tab-content"></div>
+  <div id="ios7" class="tab-content"></div>
+  <div id="ios8" class="tab-content"></div>
+  <div id="ios9" class="tab-content"></div>
+  <div id="ios10" class="tab-content"></div>
+  <div id="ios11" class="tab-content"></div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.remove('active');
+      });
+      document.getElementById(tabId).classList.add('active');
+
+      document.querySelectorAll('.tab-link').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>
 
