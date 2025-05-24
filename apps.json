@@ -3,7 +3,7 @@
     "title": "Minecraft",
     "description": "popular sandbox game",
     "identifier": "minecraft",
-    "bundleId": "com.mojang.minecraft",
+    "bundleId": "com.mojang.minecraftpe",
     "version": "1.0",
     "iosVersions": [5, 6, 7],
     "ipa": "ipas/minecraft.ipa",
