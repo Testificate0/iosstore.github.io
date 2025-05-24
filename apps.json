@@ -21,4 +21,114 @@
     "plist": "plists/weathermini.plist",
     "icon": "icons/weathermini.png"
   }
+    {
+    "title": "Plants vs. Zombies",
+    "description": "Defend your home from zombies using plants!",
+    "identifier": "pvz",
+    "bundleId": "com.popcap.ios.PvZ",
+    "version": "1.9.5",
+    "iosVersions": [4, 5, 6],
+    "ipa": "ipas/pvz.ipa",
+    "plist": "plists/pvz.plist",
+    "icon": "icons/pvz.png"
+  },
+  {
+    "title": "Instagram (Legacy)",
+    "description": "Classic photo sharing experience",
+    "identifier": "instagram",
+    "bundleId": "com.burbn.instagram",
+    "version": "4.0.2",
+    "iosVersions": [5, 6],
+    "ipa": "ipas/instagram.ipa",
+    "plist": "plists/instagram.plist",
+    "icon": "icons/instagram.png"
+  },
+  {
+    "title": "YouTube (Old Stock App)",
+    "description": "Default YouTube app before iOS 6",
+    "identifier": "youtube",
+    "bundleId": "com.apple.youtube",
+    "version": "2.3",
+    "iosVersions": [4, 5, 6],
+    "ipa": "ipas/youtube.ipa",
+    "plist": "plists/youtube.plist",
+    "icon": "icons/youtube.png"
+  },
+  {
+    "title": "iBooks",
+    "description": "Apple’s original eBook reader",
+    "identifier": "ibooks",
+    "bundleId": "com.apple.iBooks",
+    "version": "2.1.1",
+    "iosVersions": [4, 5, 6],
+    "ipa": "ipas/ibooks.ipa",
+    "plist": "plists/ibooks.plist",
+    "icon": "icons/ibooks.png"
+  },
+  {
+    "title": "Safari Download Manager",
+    "description": "Jailbreak tweak to download files",
+    "identifier": "safaridm",
+    "bundleId": "com.ashman.safaridownloadmanager",
+    "version": "1.5",
+    "iosVersions": [4, 5, 6],
+    "ipa": "ipas/safaridm.ipa",
+    "plist": "plists/safaridm.plist",
+    "icon": "icons/safaridm.png"
+  },
+  {
+    "title": "Cydia",
+    "description": "The jailbreak app store",
+    "identifier": "cydia",
+    "bundleId": "com.saurik.Cydia",
+    "version": "1.1.8",
+    "iosVersions": [4, 5, 6],
+    "ipa": "ipas/cydia.ipa",
+    "plist": "plists/cydia.plist",
+    "icon": "icons/cydia.png"
+  },
+  {
+    "title": "Shazam (Classic)",
+    "description": "Music recognition app",
+    "identifier": "shazam",
+    "bundleId": "com.shazam.Shazam",
+    "version": "4.9",
+    "iosVersions": [5, 6],
+    "ipa": "ipas/shazam.ipa",
+    "plist": "plists/shazam.plist",
+    "icon": "icons/shazam.png"
+  },
+  {
+    "title": "Skype (Legacy)",
+    "description": "Early Skype for iOS",
+    "identifier": "skype",
+    "bundleId": "com.skype.skype",
+    "version": "4.2",
+    "iosVersions": [5, 6],
+    "ipa": "ipas/skype.ipa",
+    "plist": "plists/skype.plist",
+    "icon": "icons/skype.png"
+  },
+  {
+    "title": "Jetpack Joyride",
+    "description": "Side-scrolling endless runner by Halfbrick",
+    "identifier": "jetpack",
+    "bundleId": "com.halfbrick.jetpackjoyride",
+    "version": "1.3",
+    "iosVersions": [5, 6],
+    "ipa": "ipas/jetpack.ipa",
+    "plist": "plists/jetpack.plist",
+    "icon": "icons/jetpack.png"
+  },
+  {
+    "title": "Flappy Bird",
+    "description": "Tap to fly, don’t crash!",
+    "identifier": "flappybird",
+    "bundleId": "com.dotgears.flappybird",
+    "version": "1.2",
+    "iosVersions": [5, 6, 7],
+    "ipa": "ipas/flappybird.ipa",
+    "plist": "plists/flappybird.plist",
+    "icon": "icons/flappybird.png"
+  }z
 ]
