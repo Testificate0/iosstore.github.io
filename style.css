@@ -1,119 +1,79 @@
-/* Base / Shared Styles */
 body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #f0f0f0;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-  transition: all 0.3s ease;
+}
+
+.tab-bar {
+  text-align: center;
+  background: linear-gradient(to bottom, #cfd3d7, #aeb3b9);
+  border-bottom: 1px solid #8e8e93;
+  padding: 10px 0;
+}
+
+.platform-btn {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  background: #f8f8f8;
+  font-weight: bold;
+  font-size: 16px;
+  color: #3c3c3c;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.platform-btn.active {
+  background: #007aff;
+  color: white;
+}
+
+.dropdown {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.dropdown select {
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+#app-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
 }
 
 .app-card {
+  border: 1px solid #ccc;
+  background: #fff;
   border-radius: 12px;
-  margin: 20px;
-  padding: 10px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
+  margin: 10px;
+  padding: 15px;
+  width: 300px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .app-icon {
   width: 76px;
   height: 76px;
   border-radius: 16px;
-  margin-right: 12px;
-  flex-shrink: 0;
-}
-
-.app-details {
-  flex: 1;
+  background: #000;
+  margin-bottom: 10px;
 }
 
 .install-btn {
+  display: inline-block;
+  margin-top: 10px;
   padding: 6px 16px;
   font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: center;
-  margin-top: 10px;
-}
-
-.tab-bar {
-  background: #eee;
-  padding: 10px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background: white;
-  min-width: 160px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  border-radius: 6px;
-  z-index: 100;
-}
-
-.dropdown-content a {
-  display: block;
-  padding: 10px;
-  color: black;
-  text-decoration: none;
-}
-
-.dropdown-content a:hover {
-  background: #eee;
-}
-
-.dropdown button {
-  padding: 8px 14px;
-  background: #007aff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* Platform Themes */
-
-body.ios6 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background: url('https://w0.peakpx.com/wallpaper/297/1024/HD-wallpaper-apple-linen-effect-apple-cool-icloud-linen-background-ios.jpg') repeat;
-  color: #000;
-}
-
-body.ios6 .install-btn {
   background: linear-gradient(to bottom, #45a2f0, #007aff);
+  color: white;
   border: 1px solid #005ecb;
-  color: white;
-  text-shadow: 0 -1px #005ecb;
-}
-
-body.android12 {
-  font-family: Roboto, sans-serif;
-  background: #e0f2f1;
-  color: #212121;
-}
-
-body.android12 .install-btn {
-  background: #1de9b6;
-  color: black;
-  border: none;
-}
-
-body.windows10 {
-  font-family: "Segoe UI", sans-serif;
-  background: #0078d7;
-  color: white;
-}
-
-body.windows10 .install-btn {
-  background: #00bcf2;
-  border: none;
-  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
 }
