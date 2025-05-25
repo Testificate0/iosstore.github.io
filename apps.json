@@ -32,6 +32,5 @@
     "versions": [7, 8, 10],
     "appx": "appx/pvz.appx",
     "icon": "icons/pvz.png"
-  }
-  // Add more app entries as needed
+  },
 ]
