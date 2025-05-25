@@ -1,0 +1,26 @@
+body {
+  background: #303030;
+  color: #fff;
+  font-family: Roboto, sans-serif;
+}
+
+button {
+  background: #33b5e5;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  padding: 10px 15px;
+  font-size: 14px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+}
+
+button:hover {
+  background: #0099cc;
+}
+
+.app-card {
+  background: #424242;
+  border: 1px solid #666;
+  border-radius: 6px;
+  color: white;
+}
