@@ -7,53 +7,175 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="platform-sections">
+    <!-- iOS Section -->
+    <div class="platform-section" id="iosSection">
+      <h2>iOS Apps</h2>
+      <div class="dropdown-container">
+        <select id="iosDropdown" class="version-dropdown">
+          <option value="">Select iOS Version</option>
+        </select>
+      </div>
+      <div id="iosContainer" class="app-container"></div>
+    </div>
 
-  <div class="tab-bar" id="tabBar"></div>
+    <!-- Android Section -->
+    <div class="platform-section" id="androidSection">
+      <h2>Android Apps</h2>
+      <div class="dropdown-container">
+        <select id="androidDropdown" class="version-dropdown">
+          <option value="">Select Android Version</option>
+        </select>
+      </div>
+      <div id="androidContainer" class="app-container"></div>
+    </div>
 
-  <div id="tabContainer"></div>
+    <!-- Windows Section -->
+    <div class="platform-section" id="windowsSection">
+      <h2>Windows Apps</h2>
+      <div class="dropdown-container">
+        <select id="windowsDropdown" class="version-dropdown">
+          <option value="">Select Windows Version</option>
+        </select>
+      </div>
+      <div id="windowsContainer" class="app-container"></div>
+    </div>
+  </div>
 
   <script>
     var iosVersions = [4, 5, 6, 7, 8, 9, 10, 11];
-    var tabBar = document.getElementById("tabBar");
-    var tabContainer = document.getElementById("tabContainer");
+    var androidVersions = [4, 5, 6, 7, 8, 9];
+    var windowsVersions = ["8.1", "10", "11"];
 
-    // Generate tabs and containers
+    var iosDropdown = document.getElementById("iosDropdown");
+    var androidDropdown = document.getElementById("androidDropdown");
+    var windowsDropdown = document.getElementById("windowsDropdown");
+    
+    var iosContainer = document.getElementById("iosContainer");
+    var androidContainer = document.getElementById("androidContainer");
+    var windowsContainer = document.getElementById("windowsContainer");
+
+    // Populate iOS dropdown
     for (var i = 0; i < iosVersions.length; i++) {
-      (function(idx){
-        var v = iosVersions[idx];
-        // Buttons
-        var btn = document.createElement("button");
-        btn.innerHTML = "iOS " + v;
-        btn.className = "tab-link" + (idx === 0 ? " active" : "");
-        btn.onclick = function() {
-          showTab("ios" + v, btn);
-        };
-        tabBar.appendChild(btn);
-
-        // Content container
-        var content = document.createElement("div");
-        content.id = "ios" + v;
-        content.className = "tab-content" + (idx === 0 ? " active" : "");
-        tabContainer.appendChild(content);
-      })(i);
+      var option = document.createElement("option");
+      option.value = "ios" + iosVersions[i];
+      option.text = "iOS " + iosVersions[i];
+      iosDropdown.appendChild(option);
     }
 
-    function showTab(tabId, button) {
-      var tabs = document.getElementsByClassName("tab-content");
-      for (var i = 0; i < tabs.length; i++) {
-        tabs[i].className = tabs[i].className.replace(" active", "");
-      }
-      var activeTab = document.getElementById(tabId);
-      activeTab.className += " active";
-
-      var btns = document.getElementsByClassName("tab-link");
-      for (var i = 0; i < btns.length; i++) {
-        btns[i].className = btns[i].className.replace(" active", "");
-      }
-      button.className += " active";
+    // Populate Android dropdown
+    for (var i = 0; i < androidVersions.length; i++) {
+      var option = document.createElement("option");
+      option.value = "android" + androidVersions[i];
+      option.text = "Android " + androidVersions[i];
+      androidDropdown.appendChild(option);
     }
 
-    // Fetch replacement using XMLHttpRequest
+    // Populate Windows dropdown
+    for (var i = 0; i < windowsVersions.length; i++) {
+      var option = document.createElement("option");
+      option.value = "windows" + windowsVersions[i].replace(".", "");
+      option.text = "Windows " + windowsVersions[i];
+      windowsDropdown.appendChild(option);
+    }
+
+    // Event listeners for dropdowns
+    iosDropdown.onchange = function() {
+      if (this.value) {
+        showApps("ios", this.value, iosContainer);
+      } else {
+        clearContainer(iosContainer);
+      }
+    };
+
+    androidDropdown.onchange = function() {
+      if (this.value) {
+        showApps("android", this.value, androidContainer);
+      } else {
+        clearContainer(androidContainer);
+      }
+    };
+
+    windowsDropdown.onchange = function() {
+      if (this.value) {
+        showApps("windows", this.value, windowsContainer);
+      } else {
+        clearContainer(windowsContainer);
+      }
+    };
+
+    function clearContainer(container) {
+      container.innerHTML = "";
+    }
+
+    function showApps(platform, version, container) {
+      clearContainer(container);
+      
+      // For iOS, use existing JSON structure
+      if (platform === "ios") {
+        fetchAppsJSON(function(apps) {
+          for (var i = 0; i < apps.length; i++) {
+            var app = apps[i];
+            var versionNumber = parseInt(version.replace("ios", ""));
+            if (app.iosVersions && app.iosVersions.indexOf(versionNumber) !== -1) {
+              createAppCard(app, container, "ios");
+            }
+          }
+        });
+      }
+      // For Android and Windows, you'll need to create similar JSON structures
+      else if (platform === "android") {
+        fetchAndroidAppsJSON(function(apps) {
+          for (var i = 0; i < apps.length; i++) {
+            var app = apps[i];
+            var versionNumber = parseInt(version.replace("android", ""));
+            if (app.androidVersions && app.androidVersions.indexOf(versionNumber) !== -1) {
+              createAppCard(app, container, "android");
+            }
+          }
+        });
+      }
+      else if (platform === "windows") {
+        fetchWindowsAppsJSON(function(apps) {
+          for (var i = 0; i < apps.length; i++) {
+            var app = apps[i];
+            var versionString = version.replace("windows", "").replace("81", "8.1");
+            if (app.windowsVersions && app.windowsVersions.indexOf(versionString) !== -1) {
+              createAppCard(app, container, "windows");
+            }
+          }
+        });
+      }
+    }
+
+    function createAppCard(app, container, platform) {
+      var card = document.createElement("div");
+      card.className = "app-card " + platform + "-card";
+      
+      var installUrl = "";
+      if (platform === "ios") {
+        installUrl = 'itms-services://?action=download-manifest&url=https://testificate0.github.io/iosstore.github.io/plists/' + app.identifier + '.plist';
+      } else if (platform === "android") {
+        installUrl = 'apks/' + app.identifier + '.apk';
+      } else if (platform === "windows") {
+        installUrl = 'installers/' + app.identifier + '.exe';
+      }
+
+      var innerHTML = 
+        '<img src="icons/' + platform + '/' + app.identifier + '.png" class="app-icon" alt="' + app.title + '">' +
+        '<div class="app-details">' +
+          '<h3>' + app.title + '</h3>' +
+          '<p>' + app.description + '</p>' +
+          '<a href="' + installUrl + '">' +
+            '<button class="install-btn ' + platform + '-install-btn">Install</button>' +
+          '</a>' +
+        '</div>';
+      
+      card.innerHTML = innerHTML;
+      container.appendChild(card);
+    }
+
+    // Fetch iOS apps (existing function)
     function fetchAppsJSON(callback) {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "apps.json", true);
@@ -66,33 +188,37 @@
       xhr.send(null);
     }
 
-    fetchAppsJSON(function(apps) {
-      for (var i = 0; i < apps.length; i++) {
-        var app = apps[i];
-        for (var j = 0; j < app.iosVersions.length; j++) {
-          var v = app.iosVersions[j];
-          var tab = document.getElementById("ios" + v);
-          if (!tab) continue;
-
-          var card = document.createElement("div");
-          card.className = "app-card";
-
-          var innerHTML = 
-            '<img src="icons/' + app.identifier + '.png" class="app-icon" alt="' + app.title + '">' +
-            '<div class="app-details">' +
-              '<h3>' + app.title + '</h3>' +
-              '<p>' + app.description + '</p>' +
-              '<a href="itms-services://?action=download-manifest&url=https://testificate0.github.io/iosstore.github.io/plists/' + app.identifier + '.plist">' +
-                '<button class="install-btn">Install</button>' +
-              '</a>' +
-            '</div>';
-
-          card.innerHTML = innerHTML;
-          tab.appendChild(card);
+    // Fetch Android apps (you'll need to create android-apps.json)
+    function fetchAndroidAppsJSON(callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "android-apps.json", true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var apps = JSON.parse(xhr.responseText);
+          callback(apps);
+        } else if (xhr.readyState === 4) {
+          // If file doesn't exist, return empty array
+          callback([]);
         }
-      }
-    });
-  </script>
+      };
+      xhr.send(null);
+    }
 
+    // Fetch Windows apps (you'll need to create windows-apps.json)
+    function fetchWindowsAppsJSON(callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "windows-apps.json", true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var apps = JSON.parse(xhr.responseText);
+          callback(apps);
+        } else if (xhr.readyState === 4) {
+          // If file doesn't exist, return empty array
+          callback([]);
+        }
+      };
+      xhr.send(null);
+    }
+  </script>
 </body>
 </html>
