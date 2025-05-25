@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Web App Store</title>
+  
   <!-- Theme Stylesheet -->
   <link id="theme-style" rel="stylesheet" href="" />
-  <!-- Your Custom Styles -->
+
   <style>
-    /* Basic styles for layout and components */
     body {
       margin: 0;
       font-family: sans-serif;
@@ -17,86 +17,73 @@
       text-align: center;
       padding: 1rem;
     }
+
     h1 {
-      margin-bottom: 2rem;
-      font-weight: 700;
-      font-size: 2rem;
-      color: #222;
+      margin-bottom: 1rem;
     }
+
     .platform-buttons {
       display: flex;
       justify-content: center;
-      gap: 2rem;
-      margin-bottom: 0.5rem;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
+
     .platform-button {
-      background: #007aff;
-      border: none;
-      border-radius: 12px;
-      color: white;
-      font-weight: 600;
-      font-size: 1.1rem;
       padding: 0.6rem 1.5rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background: #007aff;
+      color: white;
       cursor: pointer;
-      box-shadow: 0 3px 6px rgba(0, 122, 255, 0.5);
       transition: background 0.3s;
     }
-    .platform-button:hover,
+
     .platform-button.active {
-      background: #005bb5;
-      box-shadow: 0 6px 12px rgba(0, 91, 181, 0.7);
+      background: #0051c0;
     }
+
+    #version-select {
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      padding: 0.5rem;
+    }
+
     .app-list {
-      margin-top: 2rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 1rem;
       justify-items: center;
     }
+
     .app-card {
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
       padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       width: 160px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: box-shadow 0.2s ease;
     }
-    .app-card:hover {
-      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-    }
+
     .app-card img {
       width: 100px;
       height: 100px;
-      border-radius: 24px;
-      margin-bottom: 1rem;
       object-fit: contain;
-      background: #f0f0f0;
-      box-shadow: 0 0 10px #ccc inset;
+      border-radius: 16px;
     }
+
     .app-card p {
-      margin: 0 0 1rem;
-      font-weight: 600;
-      font-size: 1rem;
-      color: #333;
-      min-height: 40px;
+      font-weight: bold;
     }
+
     .app-card button {
+      margin-top: 0.5rem;
+      padding: 0.4rem 1rem;
       background: #007aff;
-      border: none;
-      border-radius: 12px;
       color: white;
-      font-weight: 600;
-      padding: 0.5rem 0;
-      width: 100%;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
-      font-size: 1rem;
-    }
-    .app-card button:hover {
-      background: #005bb5;
     }
   </style>
 </head>
@@ -109,9 +96,9 @@
     <button class="platform-button" onclick="setPlatform('Windows')">Windows</button>
   </div>
 
-  <main class="app-list" id="app-list">
-    <!-- Loaded apps will appear here -->
-  </main>
+  <select id="version-select" onchange="onVersionChange()"></select>
+
+  <main class="app-list" id="app-list">Loading...</main>
 
   <script>
     const themeUrls = {
@@ -126,70 +113,86 @@
       "Windows": ["8.1", "10", "11"]
     };
 
+    let currentPlatform = "iOS";
+    let currentVersion = "9";
+
     function setPlatform(platform) {
-      // Update theme stylesheet
-      const themeLink = document.getElementById("theme-style");
-      themeLink.href = themeUrls[platform];
+      currentPlatform = platform;
+      currentVersion = versionData[platform][versionData[platform].length - 1];
 
-      // Highlight active button
-      document.querySelectorAll('.platform-button').forEach(btn => btn.classList.remove('active'));
-      const activeButton = Array.from(document.querySelectorAll('.platform-button')).find(btn => btn.textContent === platform);
-      if (activeButton) activeButton.classList.add('active');
+      // Update stylesheet
+      document.getElementById("theme-style").href = themeUrls[platform];
 
-      // Load apps for the latest version
-      const latestVersion = versionData[platform][versionData[platform].length - 1];
-      loadApps(platform, latestVersion);
+      // Update button UI
+      document.querySelectorAll(".platform-button").forEach(btn => {
+        btn.classList.toggle("active", btn.textContent === platform);
+      });
+
+      // Update version dropdown
+      const versionSelect = document.getElementById("version-select");
+      versionSelect.innerHTML = "";
+      versionData[platform].forEach(v => {
+        const option = document.createElement("option");
+        option.value = v;
+        option.textContent = `v${v}`;
+        if (v.toString() === currentVersion.toString()) option.selected = true;
+        versionSelect.appendChild(option);
+      });
+
+      loadApps();
     }
 
-    async function loadApps(platform, version) {
-      const appList = document.getElementById('app-list');
-      appList.innerHTML = '<p>Loading apps...</p>';
+    function onVersionChange() {
+      currentVersion = document.getElementById("version-select").value;
+      loadApps();
+    }
+
+    async function loadApps() {
+      const appList = document.getElementById("app-list");
+      appList.innerHTML = "Loading apps...";
 
       try {
-        const response = await fetch('apps.json');
+        const response = await fetch("apps.json");
         const data = await response.json();
 
-        const apps = (data[platform] || []).filter(app => {
-          return app.versions.includes(version.toString());
-        });
+        const apps = (data[currentPlatform] || []).filter(app =>
+          app.versions.includes(currentVersion.toString())
+        );
 
         if (apps.length === 0) {
-          appList.innerHTML = `<p>No apps found for ${platform} version ${version}.</p>`;
+          appList.innerHTML = `<p>No apps found for ${currentPlatform} version ${currentVersion}.</p>`;
           return;
         }
 
-        appList.innerHTML = '';
+        appList.innerHTML = "";
         apps.forEach(app => {
-          const card = document.createElement('div');
-          card.className = 'app-card';
+          const card = document.createElement("div");
+          card.className = "app-card";
 
-          const img = document.createElement('img');
-          img.src = app.icon || 'https://via.placeholder.com/100?text=App';
+          const img = document.createElement("img");
+          img.src = app.icon || "https://via.placeholder.com/100?text=App";
           img.alt = app.name;
 
-          const name = document.createElement('p');
+          const name = document.createElement("p");
           name.textContent = app.name;
 
-          const btn = document.createElement('button');
-          btn.textContent = 'Install';
-          btn.onclick = () => {
-            window.location.href = app.link;
-          };
+          const button = document.createElement("button");
+          button.textContent = "Install";
+          button.onclick = () => window.location.href = app.link;
 
           card.appendChild(img);
           card.appendChild(name);
-          card.appendChild(btn);
-
+          card.appendChild(button);
           appList.appendChild(card);
         });
       } catch (err) {
-        appList.innerHTML = '<p>Failed to load apps.</p>';
+        appList.innerHTML = "<p>Error loading apps.</p>";
         console.error(err);
       }
     }
 
-    // Initialize with iOS platform
-    setPlatform('iOS');
+    // Initialize
+    setPlatform("iOS");
   </script>
 </body>
 </html>
