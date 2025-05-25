@@ -1,36 +1,29 @@
-[
-  {
-    "title": "Minecraft PE Alpha",
-    "description": "Popular sandbox game",
-    "identifier": "minecraft",
-    "bundleId": "com.mojang.minecraftpe",
-    "version": "0.10.0",
-    "platform": "ios",
-    "versions": [5, 6],
-    "ipa": "ipas/minecraft.ipa",
-    "plist": "plists/minecraft.plist",
-    "icon": "icons/minecraft.png"
+{
+  "iOS": {
+    "9": [
+      {
+        "name": "iOS App Example",
+        "icon": "https://archive.org/download/icon.png",
+        "link": "itms-services://?action=download-manifest&url=https://archive.org/download/app.plist"
+      }
+    ]
   },
-  {
-    "title": "Angry Birds",
-    "description": "Classic slingshot game",
-    "identifier": "angrybirds",
-    "bundleId": "com.rovio.angrybirds",
-    "version": "1.4.4",
-    "platform": "android",
-    "versions": [4, 5, 6, 7],
-    "apk": "apks/angrybirds.apk",
-    "icon": "icons/angrybirds.png"
+  "Android": {
+    "11": [
+      {
+        "name": "Android App Example",
+        "icon": "https://archive.org/download/icon.png",
+        "link": "service://download?url=https://archive.org/download/app.apk"
+      }
+    ]
   },
-  {
-    "title": "Plants vs. Zombies",
-    "description": "Defend your home from zombies using plants!",
-    "identifier": "pvz",
-    "bundleId": "com.popcap.pvz",
-    "version": "1.9.5",
-    "platform": "windows",
-    "versions": [7, 8, 10],
-    "appx": "appx/pvz.appx",
-    "icon": "icons/pvz.png"
-  },
-]
+  "Windows": {
+    "10": [
+      {
+        "name": "Windows App Example",
+        "icon": "https://archive.org/download/icon.png",
+        "link": "https://archive.org/download/app.appx"
+      }
+    ]
+  }
+}
