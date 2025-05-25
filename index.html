@@ -166,6 +166,24 @@
             font-size: 20px;
             font-weight: bold;
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .icon-fallback {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
         }
         
         .ios4-icon {
@@ -204,6 +222,20 @@
             font-size: 12px;
             opacity: 0.7;
             word-wrap: break-word;
+        }
+        
+        .app-meta {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 2px;
+            word-wrap: break-word;
+        }
+        
+        .app-requirements {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-style: italic;
         }
         
         /* Platform badges */
@@ -519,30 +551,42 @@
         const sampleApps = [
             {
                 "platform": "ios",
-                "name": "My iOS App",
-                "version": "1.2.3",
-                "package": "com.example.myapp",
-                "description": "A fantastic iOS application with amazing features.",
-                "plist_url": "itms-services://?action=download-manifest&url=https://example.com/manifest.plist",
-                "icon": "📱"
+                "name": "TaskMaster Pro",
+                "version": "3.2.1",
+                "package": "com.productivity.taskmaster",
+                "description": "Professional task management app with advanced project tracking and team collaboration.",
+                "plist_url": "itms-services://?action=download-manifest&url=https://example.com/taskmaster.plist",
+                "icon": "https://via.placeholder.com/48x48/4A90E2/FFFFFF?text=TM",
+                "category": "Productivity",
+                "size": "45.2 MB",
+                "requirements": "iOS 12.0+",
+                "developer": "Productivity Solutions Inc."
             },
             {
                 "platform": "android",
-                "name": "Android Super App",
-                "version": "2.1.0",
-                "package": "com.example.androidapp",
-                "description": "Ultimate Android app with Material Design.",
-                "apk_url": "https://example.com/app.apk",
-                "icon": "🤖"
+                "name": "PhotoCraft Mobile",
+                "version": "2.7.9",
+                "package": "com.creative.photocraft.mobile",
+                "description": "Powerful photo editing app with GPU acceleration and cloud storage integration.",
+                "apk_url": "https://example.com/photocraft.apk",
+                "icon": "https://via.placeholder.com/48x48/E74C3C/FFFFFF?text=PC",
+                "category": "Photography",
+                "size": "89.2 MB",
+                "requirements": "Android 8.0+",
+                "developer": "Creative Labs Studio"
             },
             {
                 "platform": "windows",
-                "name": "Metro Tool",
-                "version": "3.0.1",
-                "package": "com.example.windowsapp",
-                "description": "Professional Windows 8 Metro application.",
-                "appx_url": "ms-appinstaller:?source=https://example.com/app.appx",
-                "icon": "🪟"
+                "name": "CodeEditor Studio",
+                "version": "5.2.1",
+                "package": "com.dev.codeeditor.studio",
+                "description": "Full-featured development environment with debugging tools and integrated version control.",
+                "appx_url": "ms-appinstaller:?source=https://example.com/codeeditor.appx",
+                "icon": "https://via.placeholder.com/48x48/9B59B6/FFFFFF?text=CE",
+                "category": "Developer Tools",
+                "size": "156.2 MB",
+                "requirements": "Windows 11+",
+                "developer": "DevTools Inc."
             }
         ];
 
@@ -726,13 +770,28 @@
                     break;
             }
 
+            // Create icon HTML - support both image URLs and emoji fallback
+            const iconHtml = app.icon && (app.icon.startsWith('http') || app.icon.startsWith('data:')) 
+                ? `<img src="${escapeHtml(app.icon)}" alt="${escapeHtml(app.name)} icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                   <div class="icon-fallback" style="display:none;">📦</div>`
+                : `<div class="icon-fallback">${app.icon || '📦'}</div>`;
+
+            // Additional app info
+            const additionalInfo = [];
+            if (app.category) additionalInfo.push(escapeHtml(app.category));
+            if (app.size) additionalInfo.push(escapeHtml(app.size));
+            if (app.developer) additionalInfo.push(`by ${escapeHtml(app.developer)}`);
+
             return `
                 <div class="${cardClass}">
                     <div class="app-header">
-                        <div class="${iconClass}">${app.icon || '📦'}</div>
+                        <div class="${iconClass}">
+                            ${iconHtml}
+                        </div>
                         <div class="app-info">
                             <h3>${escapeHtml(app.name)}</h3>
                             <div class="app-version">v${escapeHtml(app.version)} • ${escapeHtml(app.package || 'N/A')}</div>
+                            ${additionalInfo.length > 0 ? `<div class="app-meta">${additionalInfo.join(' • ')}</div>` : ''}
                         </div>
                     </div>
                     <div class="platform-badge ${badgeClass}">
@@ -741,6 +800,7 @@
                     <div class="app-description">
                         ${escapeHtml(app.description || 'No description available.')}
                     </div>
+                    ${app.requirements ? `<div class="app-requirements">Requires: ${escapeHtml(app.requirements)}</div>` : ''}
                     <button class="${buttonClass}" onclick="handleInstall('${app.platform}', '${installUrl}', '${escapeHtml(app.name)}')">
                         ${installText}
                     </button>
