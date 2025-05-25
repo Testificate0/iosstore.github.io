@@ -1,107 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Platform CSS Switcher</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Multi-Platform App Store</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="ios6"> <!-- Default to iOS 6 -->
-
+<body>
   <div class="tab-bar">
-    <div class="dropdown">
-      <button onclick="toggleDropdown('ios')">iOS ▼</button>
-      <div id="dropdown-ios" class="dropdown-content">
-        <a href="#" onclick="setTheme('ios6')">iOS 6</a>
-        <a href="#" onclick="setTheme('ios7')">iOS 7</a> <!-- if you make another iOS style -->
-      </div>
-    </div>
-    <div class="dropdown">
-      <button onclick="toggleDropdown('android')">Android ▼</button>
-      <div id="dropdown-android" class="dropdown-content">
-        <a href="#" onclick="setTheme('android12')">Android 12</a>
-      </div>
-    </div>
-    <div class="dropdown">
-      <button onclick="toggleDropdown('windows')">Windows ▼</button>
-      <div id="dropdown-windows" class="dropdown-content">
-        <a href="#" onclick="setTheme('windows10')">Windows 10</a>
-      </div>
-    </div>
+    <button id="ios-btn" class="platform-btn active">iOS</button>
+    <button id="android-btn" class="platform-btn">Android</button>
+    <button id="windows-btn" class="platform-btn">Windows</button>
   </div>
 
-  <div class="app-card">
-    <div class="app-icon" style="background: #000;"></div>
-    <div class="app-details">
-      <strong>App Title</strong><br>
-      App description goes here.<br>
-      <button class="install-btn">Install</button>
-    </div>
-  </div>
-  <script>
-async function loadApps(platform) {
-  const response = await fetch('apps.json');
-  const apps = await response.json();
-  const container = document.getElementById('app-container');
-  container.innerHTML = '';
+  <div id="version-dropdown" class="dropdown"></div>
 
-  apps
-    .filter(app => app.platform === platform)
-    .forEach(app => {
-      const card = document.createElement('div');
-      card.className = 'app-card';
-      card.innerHTML = `
-        <img src="${app.icon}" class="app-icon">
-        <div class="app-details">
-          <h3>${app.title}</h3>
-          <p>${app.description}</p>
-          <p>Version: ${app.version}</p>
-          ${platform === 'ios' ? 
-            `<a class="install-btn" href="itms-services://?action=download-manifest&url=${app.plist}">Install</a>` :
-            platform === 'android' ?
-            `<a class="install-btn" href="${app.apk}">Download APK</a>` :
-            `<a class="install-btn" href="${app.xap}">Download XAP</a>`
-          }
-        </div>
-      `;
-      container.appendChild(card);
-    });
-}
+  <div id="app-container"></div>
 
-// Load default
-loadApps('ios');
-
-// Handle tab buttons
-document.querySelectorAll('.tab-bar button').forEach(button => {
-  button.addEventListener('click', () => {
-    document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
-    button.classList.add('active');
-    loadApps(button.dataset.platform);
-  });
-});
-</script>
-
-  <script>
-    function setTheme(theme) {
-      document.body.className = theme;
-      document.querySelectorAll('.dropdown-content').forEach(el => el.style.display = 'none');
-    }
-
-    function toggleDropdown(platform) {
-      document.querySelectorAll('.dropdown-content').forEach(dd => {
-        if (dd.id === 'dropdown-' + platform) {
-          dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
-        } else {
-          dd.style.display = 'none';
-        }
-      });
-    }
-
-    // Close dropdowns on outside click
-    window.addEventListener('click', function(e) {
-      if (!e.target.matches('button')) {
-        document.querySelectorAll('.dropdown-content').forEach(dd => dd.style.display = 'none');
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
