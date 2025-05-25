@@ -161,8 +161,15 @@
         installUrl = 'installers/' + app.identifier + '.exe';
       }
 
+      var iconPath = "icons/";
+      if (platform === "android") {
+        iconPath = "icons/android/";
+      } else if (platform === "windows") {
+        iconPath = "icons/windows/";
+      }
+
       var innerHTML = 
-        '<img src="icons/' + platform + '/' + app.identifier + '.png" class="app-icon" alt="' + app.title + '">' +
+        '<img src="' + iconPath + app.identifier + '.png" class="app-icon" alt="' + app.title + '">' +
         '<div class="app-details">' +
           '<h3>' + app.title + '</h3>' +
           '<p>' + app.description + '</p>' +
