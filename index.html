@@ -2,29 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>App Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Web App Store</title>
   <link id="theme-style" rel="stylesheet" href="ios.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: #f2f2f7;
+      color: #111;
+      text-align: center;
+      padding: 1rem;
+    }
+    h1 {
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 2rem;
+      color: #222;
+    }
+
+    /* Platform buttons container */
+    .platform-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Platform main buttons */
+    .platform-button {
+      background: #007aff;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 0.6rem 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0, 122, 255, 0.5);
+      transition: background 0.3s;
+      user-select: none;
+      position: relative;
+    }
+    .platform-button:hover,
+    .platform-button.active {
+      background: #005bb5;
+      box-shadow: 0 6px 12px rgba(0, 91, 181, 0.7);
+    }
+
+    /* Dropdown container below the buttons */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      max-width: 160px;
+      margin: 0 auto;
+      display: none;
+      flex-direction: column;
+      padding: 0.5rem 0;
+      font-size: 1rem;
+      color: #007aff;
+      font-weight: 600;
+    }
+
+    /* Show dropdown */
+    .dropdown.show {
+      display: flex;
+    }
+
+    /* Dropdown version list */
+    .dropdown ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .dropdown li {
+      padding: 0.5rem 1.5rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .dropdown li:hover {
+      background: #007aff22;
+    }
+
+    /* Position dropdown below each platform button */
+    .platform {
+      position: relative;
+    }
+
+    /* App list grid */
+    .app-list {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
+
+    /* Each app card */
+    .app-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      padding: 1rem;
+      width: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+      transition: box-shadow 0.2s ease;
+    }
+    .app-card:hover {
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+
+    .app-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 24px;
+      margin-bottom: 1rem;
+      object-fit: contain;
+      background: #f0f0f0;
+      box-shadow: 0 0 10px #ccc inset;
+    }
+
+    .app-card p {
+      margin: 0 0 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #333;
+      min-height: 40px;
+    }
+
+    .app-card button {
+      background: #007aff;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 0;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1rem;
+    }
+    .app-card button:hover {
+      background: #005bb5;
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .platform-buttons {
+        gap: 1rem;
+      }
+      .platform-button {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+      }
+      .dropdown {
+        max-width: 120px;
+      }
+      .app-list {
+        grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+        gap: 0.8rem;
+      }
+      .app-card {
+        width: 140px;
+        padding: 0.8rem;
+      }
+      .app-card img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 0.8rem;
+      }
+      .app-card p {
+        font-size: 0.9rem;
+        min-height: 32px;
+      }
+      .app-card button {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>RedStore</h1>
+  <h1>📱 Web App Store</h1>
 
   <div class="platform-buttons">
-    <div class="platform">
-      <button onclick="toggleTheme('iOS')">iOS</button>
-      <div class="dropdown" id="dropdown-iOS"></div>
+    <div class="platform" id="platform-iOS">
+      <button class="platform-button" onclick="toggleDropdown('iOS', this)">iOS</button>
+      <nav class="dropdown" id="dropdown-iOS">
+        <ul></ul>
+      </nav>
     </div>
-    <div class="platform">
-      <button onclick="toggleTheme('Android')">Android</button>
-      <div class="dropdown" id="dropdown-Android"></div>
+    <div class="platform" id="platform-Android">
+      <button class="platform-button" onclick="toggleDropdown('Android', this)">Android</button>
+      <nav class="dropdown" id="dropdown-Android">
+        <ul></ul>
+      </nav>
     </div>
-    <div class="platform">
-      <button onclick="toggleTheme('Windows')">Windows</button>
-      <div class="dropdown" id="dropdown-Windows"></div>
+    <div class="platform" id="platform-Windows">
+      <button class="platform-button" onclick="toggleDropdown('Windows', this)">Windows</button>
+      <nav class="dropdown" id="dropdown-Windows">
+        <ul></ul>
+      </nav>
     </div>
   </div>
 
-  <div class="app-list" id="app-list"></div>
+  <main class="app-list" id="app-list">
+    <!-- Loaded apps will appear here -->
+  </main>
 
   <script>
     const versionData = {
@@ -33,43 +228,59 @@
       "Windows": ["8.1", "10", "11"]
     };
 
-    // Populate dropdowns
+    // Populate version lists once on load
     for (const platform in versionData) {
-      const dropdown = document.getElementById(`dropdown-${platform}`);
+      const ul = document.querySelector(`#dropdown-${platform} ul`);
       versionData[platform].forEach(version => {
-        const btn = document.createElement("button");
-        btn.textContent = `Version ${version}`;
-        btn.onclick = () => loadApps(platform, version);
-        dropdown.appendChild(btn);
+        const li = document.createElement('li');
+        li.textContent = `Version ${version}`;
+        li.onclick = () => {
+          loadApps(platform, version);
+          closeAllDropdowns();
+          highlightActivePlatform(platform);
+        };
+        ul.appendChild(li);
       });
     }
 
-    function toggleDropdown(platform) {
-      document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
-      const dd = document.getElementById(`dropdown-${platform}`);
-      dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+    // Close all dropdowns and remove active button highlights
+    function closeAllDropdowns() {
+      document.querySelectorAll('.dropdown').forEach(dd => dd.classList.remove('show'));
+      document.querySelectorAll('.platform-button').forEach(btn => btn.classList.remove('active'));
     }
 
-    function toggleTheme(platform) {
-      const themeMap = {
-        iOS: 'ios.css',
-        Android: 'android.css',
-        Windows: 'windows.css'
-      };
-      document.getElementById('theme-style').href = themeMap[platform];
-      toggleDropdown(platform);
+    // Highlight active platform button
+    function highlightActivePlatform(platform) {
+      closeAllDropdowns();
+      const btn = document.querySelector(`#platform-${platform} .platform-button`);
+      btn.classList.add('active');
+    }
+
+    // Toggle dropdown below clicked button
+    function toggleDropdown(platform, button) {
+      const dd = document.getElementById(`dropdown-${platform}`);
+      const isVisible = dd.classList.contains('show');
+
+      closeAllDropdowns();
+
+      if (!isVisible) {
+        dd.classList.add('show');
+        button.classList.add('active');
+      }
     }
 
     async function loadApps(platform, version) {
       const appList = document.getElementById('app-list');
-      appList.innerHTML = 'Loading...';
+      appList.innerHTML = '<p>Loading apps...</p>';
       try {
         const response = await fetch('apps.json');
         const data = await response.json();
+
+        // apps.json structured as: data[platform][version] = [ { name, icon, link } ]
         const apps = data[platform]?.[version] || [];
 
-        if (!apps.length) {
-          appList.innerHTML = '<p>No apps found for this version.</p>';
+        if (apps.length === 0) {
+          appList.innerHTML = `<p>No apps found for ${platform} version ${version}.</p>`;
           return;
         }
 
@@ -79,7 +290,7 @@
           card.className = 'app-card';
 
           const img = document.createElement('img');
-          img.src = app.icon || '';
+          img.src = app.icon || 'https://via.placeholder.com/100?text=App';
           img.alt = app.name;
 
           const name = document.createElement('p');
@@ -87,15 +298,18 @@
 
           const btn = document.createElement('button');
           btn.textContent = 'Install';
-          btn.onclick = () => window.location.href = app.link;
+          btn.onclick = () => {
+            window.location.href = app.link;
+          };
 
           card.appendChild(img);
           card.appendChild(name);
           card.appendChild(btn);
+
           appList.appendChild(card);
         });
       } catch (err) {
-        appList.innerHTML = '<p>Error loading apps.</p>';
+        appList.innerHTML = '<p>Failed to load apps.</p>';
         console.error(err);
       }
     }
