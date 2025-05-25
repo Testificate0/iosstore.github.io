@@ -1,3 +1,4 @@
+/* General body styling */
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: url('https://w0.peakpx.com/wallpaper/297/1024/HD-wallpaper-apple-linen-effect-apple-cool-icloud-linen-background-ios.jpg') repeat;
@@ -6,14 +7,11 @@ body {
   padding: 0;
 }
 
+/* Tab bar styles (if used) */
 .tab-bar {
   text-align: center;
-  background: #cfd3d7; /* fallback for linear-gradient */
-  background: -webkit-gradient(linear, left top, left bottom, from(#cfd3d7), to(#aeb3b9)); /* iOS6 prefix */
-  background: -webkit-linear-gradient(top, #cfd3d7, #aeb3b9);
-  background: linear-gradient(top, #cfd3d7, #aeb3b9); /* fallback */
+  background: linear-gradient(to bottom, #cfd3d7, #aeb3b9);
   border-bottom: 1px solid #8e8e93;
-  /* box-shadow inset not supported well, remove */
   padding: 5px 0;
 }
 
@@ -28,9 +26,6 @@ body {
   color: #3c3c3c;
   text-shadow: 0 1px white;
   border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  /* avoid newer box-shadow */
 }
 
 .tab-bar button.active {
@@ -39,6 +34,7 @@ body {
   border-color: #007aff;
 }
 
+/* Tab content hidden unless active */
 .tab-content {
   display: none;
   padding: 20px;
@@ -48,31 +44,48 @@ body {
   display: block;
 }
 
+/* Horizontal layout for platform sections */
+.platform-sections {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.platform-section {
+  flex: 1;
+  min-width: 300px;
+  border: 1px solid #ccc;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* App card design */
 .app-card {
   border: 1px solid #ccc;
-  background: #fff; /* avoid rgba */
-  /* background: rgba(255, 255, 255, 0.9); */
+  background: #fff;
   border-radius: 12px;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
   margin-bottom: 20px;
   padding: 10px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .app-icon {
-  float: left;
   width: 76px;
   height: 76px;
   border-radius: 16px;
-  -webkit-border-radius: 16px;
-  -moz-border-radius: 16px;
   background: #000;
   margin-right: 12px;
+  flex-shrink: 0;
 }
 
 .app-details {
-  overflow: hidden;
+  flex-grow: 1;
 }
 
 .install-btn {
@@ -80,37 +93,38 @@ body {
   margin-top: 10px;
   padding: 6px 16px;
   font-size: 14px;
-  background: #007aff; /* fallback */
-  background: -webkit-gradient(linear, left top, left bottom, from(#45a2f0), to(#007aff));
-  background: -webkit-linear-gradient(top, #45a2f0, #007aff);
-  background: linear-gradient(top, #45a2f0, #007aff);
+  background: linear-gradient(to bottom, #45a2f0, #007aff);
   color: white;
   border: 1px solid #005ecb;
   border-radius: 8px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
   text-shadow: 0 -1px #005ecb;
   cursor: pointer;
   text-align: center;
 }
 
 .install-btn:hover {
-  background: #258df2; /* fallback */
-  background: -webkit-gradient(linear, left top, left bottom, from(#5eb4f8), to(#258df2));
-  background: -webkit-linear-gradient(top, #5eb4f8, #258df2);
-  background: linear-gradient(top, #5eb4f8, #258df2);
+  background: linear-gradient(to bottom, #5eb4f8, #258df2);
 }
 
-/* Small screens fallback */
-@media screen and (max-width: 480px) {
-  .app-icon {
-    float: none;
-    display: block;
-    margin: 0 auto 10px auto;
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .platform-sections {
+    flex-direction: column;
   }
 
+  .platform-section {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
   .app-card {
+    flex-direction: column;
     text-align: center;
+  }
+
+  .app-icon {
+    margin: 0 auto 10px auto;
   }
 
   .install-btn {
