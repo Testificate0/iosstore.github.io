@@ -1,68 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multi-Platform App Store</title>
-  <link id="theme-style" rel="stylesheet" href="ios6.css" />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Platform CSS Switcher</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="ios6"> <!-- Default to iOS 6 -->
 
   <div class="tab-bar">
-    <div class="platform-selector">
-      <div class="dropdown">
-        <button onclick="toggleDropdown('ios')">iOS ▼</button>
-        <div id="dropdown-ios" class="dropdown-content">
-          <a href="#" onclick="switchTheme('ios6.css')">iOS 6</a>
-          <a href="#" onclick="switchTheme('ios7.css')">iOS 7</a>
-        </div>
+    <div class="dropdown">
+      <button onclick="toggleDropdown('ios')">iOS ▼</button>
+      <div id="dropdown-ios" class="dropdown-content">
+        <a href="#" onclick="setTheme('ios6')">iOS 6</a>
+        <a href="#" onclick="setTheme('ios7')">iOS 7</a> <!-- if you make another iOS style -->
       </div>
-      <div class="dropdown">
-        <button onclick="toggleDropdown('android')">Android ▼</button>
-        <div id="dropdown-android" class="dropdown-content">
-          <a href="#" onclick="switchTheme('android12.css')">Android 12</a>
-        </div>
+    </div>
+    <div class="dropdown">
+      <button onclick="toggleDropdown('android')">Android ▼</button>
+      <div id="dropdown-android" class="dropdown-content">
+        <a href="#" onclick="setTheme('android12')">Android 12</a>
       </div>
-      <div class="dropdown">
-        <button onclick="toggleDropdown('windows')">Windows ▼</button>
-        <div id="dropdown-windows" class="dropdown-content">
-          <a href="#" onclick="switchTheme('windows10.css')">Windows 10</a>
-        </div>
+    </div>
+    <div class="dropdown">
+      <button onclick="toggleDropdown('windows')">Windows ▼</button>
+      <div id="dropdown-windows" class="dropdown-content">
+        <a href="#" onclick="setTheme('windows10')">Windows 10</a>
       </div>
     </div>
   </div>
 
-  <div class="platform-sections">
-    <div class="platform-section">
-      <div class="app-card">
-        <div class="app-icon"></div>
-        <div class="app-details">
-          <strong>App Name</strong><br />
-          Description of the app.<br />
-          <button class="install-btn">Install</button>
-        </div>
-      </div>
+  <div class="app-card">
+    <div class="app-icon" style="background: #000;"></div>
+    <div class="app-details">
+      <strong>App Title</strong><br>
+      App description goes here.<br>
+      <button class="install-btn">Install</button>
     </div>
   </div>
 
   <script>
-    function switchTheme(cssFile) {
-      document.getElementById('theme-style').href = cssFile;
+    function setTheme(theme) {
+      document.body.className = theme;
+      document.querySelectorAll('.dropdown-content').forEach(el => el.style.display = 'none');
     }
 
     function toggleDropdown(platform) {
-      const dropdowns = document.querySelectorAll('.dropdown-content');
-      dropdowns.forEach(dd => dd.style.display = 'none');
-      const selected = document.getElementById('dropdown-' + platform);
-      selected.style.display = selected.style.display === 'block' ? 'none' : 'block';
+      document.querySelectorAll('.dropdown-content').forEach(dd => {
+        if (dd.id === 'dropdown-' + platform) {
+          dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        } else {
+          dd.style.display = 'none';
+        }
+      });
     }
 
-    window.onclick = function(e) {
+    // Close dropdowns on outside click
+    window.addEventListener('click', function(e) {
       if (!e.target.matches('button')) {
         document.querySelectorAll('.dropdown-content').forEach(dd => dd.style.display = 'none');
       }
-    };
+    });
   </script>
 </body>
 </html>
