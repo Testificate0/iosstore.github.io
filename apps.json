@@ -1,32 +1,26 @@
 {
   "iOS": [
     {
-      "name": "Minecraft Alpha",
-      "icon": "https://example.com/coolapp.png",
-      "link": "itms-services://?action=download-manifest&url=https://example.com/coolapp.plist",
-      "versions": [8, 9]
-    },
-    {
-      "name": "OldApp",
-      "icon": "https://example.com/oldapp.png",
-      "link": "itms-services://?action=download-manifest&url=https://example.com/oldapp.plist",
-      "versions": [4, 5, 6]
+      "name": "Test App iOS",
+      "icon": "https://via.placeholder.com/100?text=iOS",
+      "link": "itms-services://?action=download-manifest&url=https://example.com/manifest.plist",
+      "versions": ["4", "5", "6", "9"]
     }
   ],
   "Android": [
     {
-      "name": "MyAndroidApp",
-      "icon": "https://example.com/androidapp.png",
-      "link": "service://download?apk=https://example.com/myapp.apk",
-      "versions": [2,3,4,5,6,7,8,9,10,11]
+      "name": "Test App Android",
+      "icon": "https://via.placeholder.com/100?text=Android",
+      "link": "service://androidinstall",
+      "versions": ["9", "10"]
     }
   ],
   "Windows": [
     {
-      "name": "WindowsApp",
-      "icon": "https://example.com/windowsapp.png",
-      "link": "ms-appinstaller:?source=https://example.com/windowsapp.appinstaller",
-      "versions": ["8.1", "10", "11"]
+      "name": "Test App Windows",
+      "icon": "https://via.placeholder.com/100?text=Windows",
+      "link": "https://example.com/windows-app.exe",
+      "versions": ["10", "11"]
     }
   ]
 }
