@@ -269,50 +269,59 @@
       }
     }
 
-    async function loadApps(platform, version) {
-      const appList = document.getElementById('app-list');
-      appList.innerHTML = '<p>Loading apps...</p>';
-      try {
-        const response = await fetch('apps.json');
-        const data = await response.json();
+async function loadApps(platform, version) {
+  const appList = document.getElementById('app-list');
+  appList.innerHTML = '<p>Loading apps...</p>';
 
-        // apps.json structured as: data[platform][version] = [ { name, icon, link } ]
-        const apps = data[platform]?.[version] || [];
+  try {
+    const response = await fetch('apps.json');
+    const data = await response.json();
 
-        if (apps.length === 0) {
-          appList.innerHTML = `<p>No apps found for ${platform} version ${version}.</p>`;
-          return;
-        }
-
-        appList.innerHTML = '';
-        apps.forEach(app => {
-          const card = document.createElement('div');
-          card.className = 'app-card';
-
-          const img = document.createElement('img');
-          img.src = app.icon || 'https://via.placeholder.com/100?text=App';
-          img.alt = app.name;
-
-          const name = document.createElement('p');
-          name.textContent = app.name;
-
-          const btn = document.createElement('button');
-          btn.textContent = 'Install';
-          btn.onclick = () => {
-            window.location.href = app.link;
-          };
-
-          card.appendChild(img);
-          card.appendChild(name);
-          card.appendChild(btn);
-
-          appList.appendChild(card);
-        });
-      } catch (err) {
-        appList.innerHTML = '<p>Failed to load apps.</p>';
-        console.error(err);
+    const apps = (data[platform] || []).filter(app => {
+      // Version may be number or string, normalize for comparison
+      if (typeof version === "number") {
+        return app.versions.includes(version);
+      } else {
+        // version is string (e.g., "8.1"), compare as string
+        return app.versions.includes(version.toString());
       }
+    });
+
+    if (apps.length === 0) {
+      appList.innerHTML = `<p>No apps found for ${platform} version ${version}.</p>`;
+      return;
     }
+
+    appList.innerHTML = '';
+    apps.forEach(app => {
+      const card = document.createElement('div');
+      card.className = 'app-card';
+
+      const img = document.createElement('img');
+      img.src = app.icon || 'https://via.placeholder.com/100?text=App';
+      img.alt = app.name;
+
+      const name = document.createElement('p');
+      name.textContent = app.name;
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Install';
+      btn.onclick = () => {
+        window.location.href = app.link;
+      };
+
+      card.appendChild(img);
+      card.appendChild(name);
+      card.appendChild(btn);
+
+      appList.appendChild(card);
+    });
+  } catch (err) {
+    appList.innerHTML = '<p>Failed to load apps.</p>';
+    console.error(err);
+  }
+}
+
   </script>
 </body>
 </html>
