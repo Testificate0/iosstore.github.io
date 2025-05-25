@@ -1,7 +1,7 @@
 {
   "iOS": [
     {
-      "name": "CoolApp",
+      "name": "Minecraft Alpha",
       "icon": "https://example.com/coolapp.png",
       "link": "itms-services://?action=download-manifest&url=https://example.com/coolapp.plist",
       "versions": [8, 9]
