@@ -1,34 +1,37 @@
 [
   {
     "title": "Minecraft PE Alpha",
-    "description": "popular sandbox game",
+    "description": "Popular sandbox game",
     "identifier": "minecraft",
     "bundleId": "com.mojang.minecraftpe",
     "version": "0.10.0",
     "platform": "ios",
-    "iosVersions": [5, 6],
+    "versions": [5, 6],
     "ipa": "ipas/minecraft.ipa",
     "plist": "plists/minecraft.plist",
     "icon": "icons/minecraft.png"
   },
   {
-    "title": "Angry Birds (Android)",
-    "description": "Classic Android version",
-    "identifier": "angrybirds_android",
+    "title": "Angry Birds",
+    "description": "Classic slingshot game",
+    "identifier": "angrybirds",
     "bundleId": "com.rovio.angrybirds",
     "version": "1.4.4",
     "platform": "android",
+    "versions": [4, 5, 6, 7],
     "apk": "apks/angrybirds.apk",
     "icon": "icons/angrybirds.png"
   },
   {
-    "title": "Vine for Windows Phone",
-    "description": "Vine on WP",
-    "identifier": "vine_win",
-    "bundleId": "com.vine.app",
-    "version": "1.0.0",
+    "title": "Plants vs. Zombies",
+    "description": "Defend your home from zombies using plants!",
+    "identifier": "pvz",
+    "bundleId": "com.popcap.pvz",
+    "version": "1.9.5",
     "platform": "windows",
-    "xap": "xaps/vine.xap",
-    "icon": "icons/vine.png"
+    "versions": [7, 8, 10],
+    "appx": "appx/pvz.appx",
+    "icon": "icons/pvz.png"
   }
+  // Add more app entries as needed
 ]
