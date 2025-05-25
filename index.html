@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Web App Store</title>
-  
+
   <!-- Theme Stylesheet -->
   <link id="theme-style" rel="stylesheet" href="" />
 
@@ -16,6 +16,7 @@
       color: #111;
       text-align: center;
       padding: 1rem;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
     h1 {
@@ -27,6 +28,7 @@
       justify-content: center;
       gap: 1rem;
       margin-bottom: 1rem;
+      flex-wrap: wrap;
     }
 
     .platform-button {
@@ -63,6 +65,11 @@
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       width: 160px;
+      transition: transform 0.2s;
+    }
+
+    .app-card:hover {
+      transform: translateY(-4px);
     }
 
     .app-card img {
@@ -120,15 +127,12 @@
       currentPlatform = platform;
       currentVersion = versionData[platform][versionData[platform].length - 1];
 
-      // Update stylesheet
       document.getElementById("theme-style").href = themeUrls[platform];
 
-      // Update button UI
       document.querySelectorAll(".platform-button").forEach(btn => {
         btn.classList.toggle("active", btn.textContent === platform);
       });
 
-      // Update version dropdown
       const versionSelect = document.getElementById("version-select");
       versionSelect.innerHTML = "";
       versionData[platform].forEach(v => {
@@ -178,7 +182,9 @@
 
           const button = document.createElement("button");
           button.textContent = "Install";
-          button.onclick = () => window.location.href = app.link;
+          button.onclick = () => {
+            window.location.href = app.link;
+          };
 
           card.appendChild(img);
           card.appendChild(name);
@@ -191,7 +197,6 @@
       }
     }
 
-    // Initialize
     setPlatform("iOS");
   </script>
 </body>
