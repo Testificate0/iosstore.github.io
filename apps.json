@@ -1,29 +1,32 @@
 {
-  "iOS": {
-    "9": [
-      {
-        "name": "iOS App Example",
-        "icon": "https://archive.org/download/icon.png",
-        "link": "itms-services://?action=download-manifest&url=https://archive.org/download/app.plist"
-      }
-    ]
-  },
-  "Android": {
-    "11": [
-      {
-        "name": "Android App Example",
-        "icon": "https://archive.org/download/icon.png",
-        "link": "service://download?url=https://archive.org/download/app.apk"
-      }
-    ]
-  },
-  "Windows": {
-    "10": [
-      {
-        "name": "Windows App Example",
-        "icon": "https://archive.org/download/icon.png",
-        "link": "https://archive.org/download/app.appx"
-      }
-    ]
-  }
+  "iOS": [
+    {
+      "name": "CoolApp",
+      "icon": "https://example.com/coolapp.png",
+      "link": "itms-services://?action=download-manifest&url=https://example.com/coolapp.plist",
+      "versions": [8, 9]
+    },
+    {
+      "name": "OldApp",
+      "icon": "https://example.com/oldapp.png",
+      "link": "itms-services://?action=download-manifest&url=https://example.com/oldapp.plist",
+      "versions": [4, 5, 6]
+    }
+  ],
+  "Android": [
+    {
+      "name": "MyAndroidApp",
+      "icon": "https://example.com/androidapp.png",
+      "link": "service://download?apk=https://example.com/myapp.apk",
+      "versions": [2,3,4,5,6,7,8,9,10,11]
+    }
+  ],
+  "Windows": [
+    {
+      "name": "WindowsApp",
+      "icon": "https://example.com/windowsapp.png",
+      "link": "ms-appinstaller:?source=https://example.com/windowsapp.appinstaller",
+      "versions": ["8.1", "10", "11"]
+    }
+  ]
 }
