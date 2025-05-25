@@ -1,378 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal App Store</title>
-    
-    <!-- CSS Frameworks -->
-    <link rel="stylesheet" href="https://www.raffael.me/iOS.css/ios.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ZMYaro/holo-web@master/css/holo-ics-light-elements.css">
-    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
-    
-    <style>
-        /* iOS 4 inspired styling */
-        body {
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><rect width="4" height="4" fill="%23000"/><rect width="2" height="2" fill="%23111"/><rect x="2" y="2" width="2" height="2" fill="%23111"/></svg>');
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #fff;
-        }
-        
-        /* Classic iOS 4 navigation bar */
-        .ios4-navbar {
-            background: linear-gradient(to bottom, #6d84a3 0%, #4a5f7a 50%, #5577a2 51%, #6d84a3 100%);
-            border-bottom: 1px solid #2d3642;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 3px rgba(0,0,0,0.6);
-        }
-        
-        .ios4-title {
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            text-shadow: 0 -1px 0 rgba(0,0,0,0.7);
-        }
-        
-        /* Main container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        /* Platform filter - Windows 8 Metro style */
-        .platform-filter {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        
-        .metro-filter-btn {
-            background: #2672ec;
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            font-size: 14px;
-            font-weight: 300;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: background-color 0.2s;
-        }
-        
-        .metro-filter-btn:hover {
-            background: #1c5fb8;
-        }
-        
-        .metro-filter-btn.active {
-            background: #00bcf2;
-        }
-        
-        /* Apps grid */
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            margin: 30px 0;
-        }
-        
-        /* iOS 4 style app cards */
-        .ios4-app-card {
-            background: linear-gradient(to bottom, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
-            border: 1px solid #d9d9d9;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-            color: #333;
-        }
-        
-        /* Android 6 style app cards */
-        .android6-app-card {
-            background: #fff;
-            border-radius: 2px;
-            padding: 16px;
-            box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
-            color: #212121;
-            elevation: 2;
-        }
-        
-        /* Windows 8 style app cards */
-        .metro-app-card {
-            background: #2672ec;
-            color: white;
-            padding: 20px;
-            margin: 5px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .metro-app-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        .app-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        /* iOS 4 style icons */
-        .ios4-icon {
-            width: 57px;
-            height: 57px;
-            border-radius: 10px;
-            margin-right: 12px;
-            background: linear-gradient(to bottom, #87ceeb 0%, #4682b4 100%);
-            border: 1px solid #2f4f4f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 3px rgba(0,0,0,0.6);
-        }
-        
-        /* Android 6 material icons */
-        .android6-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            margin-right: 16px;
-            background: #4CAF50;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.26);
-        }
-        
-        /* Windows 8 metro icons */
-        .metro-icon {
-            width: 40px;
-            height: 40px;
-            margin-right: 15px;
-            background: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 16px;
-            font-weight: 300;
-        }
-        
-        .app-info h3 {
-            margin: 0 0 4px 0;
-            font-size: 16px;
-        }
-        
-        .app-version {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-        
-        /* Platform badges */
-        .platform-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            font-size: 10px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        
-        .badge-ios {
-            background: linear-gradient(to bottom, #87ceeb 0%, #4682b4 100%);
-            color: white;
-            border-radius: 6px;
-            border: 1px solid #2f4f4f;
-            text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-        }
-        
-        .badge-android {
-            background: #4CAF50;
-            color: white;
-            border-radius: 2px;
-        }
-        
-        .badge-windows {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-        
-        .app-description {
-            font-size: 13px;
-            line-height: 1.4;
-            margin-bottom: 15px;
-        }
-        
-        /* iOS 4 style buttons */
-        .ios4-button {
-            background: linear-gradient(to bottom, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
-            border: 1px solid #d9d9d9;
-            border-radius: 10px;
-            padding: 10px 15px;
-            color: #333;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 3px rgba(0,0,0,0.3);
-            text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-        }
-        
-        .ios4-button:hover {
-            background: linear-gradient(to bottom, #f0f0f0 0%, #e6e6e6 47%, #dadada 100%);
-        }
-        
-        .ios4-button:active {
-            background: linear-gradient(to bottom, #dadada 0%, #e6e6e6 47%, #f0f0f0 100%);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3) inset;
-        }
-        
-        /* Android 6 material buttons */
-        .android6-button {
-            background: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 2px;
-            padding: 12px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            width: 100%;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-            text-transform: uppercase;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.26);
-            transition: box-shadow 0.2s;
-        }
-        
-        .android6-button:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.26);
-        }
-        
-        .android6-button:active {
-            box-shadow: 0 6px 10px rgba(0,0,0,0.26);
-        }
-        
-        /* Windows 8 metro buttons */
-        .metro-button {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            padding: 12px 20px;
-            font-size: 12px;
-            font-weight: 300;
-            cursor: pointer;
-            width: 100%;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-            text-transform: uppercase;
-            transition: background-color 0.2s;
-        }
-        
-        .metro-button:hover {
-            background: rgba(255,255,255,0.2);
-        }
-        
-        .metro-button:active {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        /* Configuration Section - iOS 4 style */
-        .config-section {
-            background: linear-gradient(to bottom, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
-            border: 1px solid #d9d9d9;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 3px rgba(0,0,0,0.6);
-            color: #333;
-        }
-        
-        .config-section h3 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #333;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-        }
-        
-        .json-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-            margin-bottom: 10px;
-            background: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2) inset;
-        }
-        
-        /* Loading and error states */
-        .loading {
-            text-align: center;
-            color: white;
-            font-size: 16px;
-            padding: 40px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        
-        .error {
-            background: linear-gradient(to bottom, #ff6b6b 0%, #ee5a52 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 6px;
-            text-align: center;
-            margin: 20px 0;
-            border: 1px solid #d63031;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 1px 3px rgba(0,0,0,0.3);
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .apps-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
-            .platform-filter {
-                gap: 3px;
-            }
-            
-            .metro-filter-btn {
-                padding: 12px 18px;
-                font-size: 12px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Web App Store</title>
+
+  <!-- Theme Stylesheet -->
+  <link id="theme-style" rel="stylesheet" href="" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f2f2f7;
+      color: #111;
+      text-align: center;
+      padding: 1rem;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    .platform-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .platform-button {
+      padding: 0.6rem 1.5rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background: #007aff;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .platform-button.active {
+      background: #0051c0;
+    }
+
+    #version-select {
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      padding: 0.5rem;
+    }
+
+    .app-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
+
+    .app-card {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 160px;
+      transition: transform 0.2s;
+    }
+
+    .app-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .app-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 16px;
+    }
+
+    .app-card p {
+      font-weight: bold;
+    }
+
+    .app-card button {
+      margin-top: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: #007aff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .error-message {
+      color: #ff3b30;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <h1>📱 Web App Store</h1>
