@@ -37,6 +37,48 @@
       <button class="install-btn">Install</button>
     </div>
   </div>
+  <script>
+async function loadApps(platform) {
+  const response = await fetch('apps.json');
+  const apps = await response.json();
+  const container = document.getElementById('app-container');
+  container.innerHTML = '';
+
+  apps
+    .filter(app => app.platform === platform)
+    .forEach(app => {
+      const card = document.createElement('div');
+      card.className = 'app-card';
+      card.innerHTML = `
+        <img src="${app.icon}" class="app-icon">
+        <div class="app-details">
+          <h3>${app.title}</h3>
+          <p>${app.description}</p>
+          <p>Version: ${app.version}</p>
+          ${platform === 'ios' ? 
+            `<a class="install-btn" href="itms-services://?action=download-manifest&url=${app.plist}">Install</a>` :
+            platform === 'android' ?
+            `<a class="install-btn" href="${app.apk}">Download APK</a>` :
+            `<a class="install-btn" href="${app.xap}">Download XAP</a>`
+          }
+        </div>
+      `;
+      container.appendChild(card);
+    });
+}
+
+// Load default
+loadApps('ios');
+
+// Handle tab buttons
+document.querySelectorAll('.tab-bar button').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
+    button.classList.add('active');
+    loadApps(button.dataset.platform);
+  });
+});
+</script>
 
   <script>
     function setTheme(theme) {
