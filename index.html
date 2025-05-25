@@ -375,273 +375,250 @@
     </style>
 </head>
 <body>
-    <!-- iOS 4 style navigation bar -->
-    <div class="ios4-navbar">
-        <div class="ios4-title">📱 Universal App Store</div>
-    </div>
-    
-    <div class="container">
-        <!-- Windows 8 Metro style platform filter -->
-        <div class="platform-filter">
-            <button class="metro-filter-btn active" data-platform="all">All Platforms</button>
-            <button class="metro-filter-btn" data-platform="ios">iOS</button>
-            <button class="metro-filter-btn" data-platform="android">Android</button>
-            <button class="metro-filter-btn" data-platform="windows">Windows</button>
-        </div>
-        
-        <div id="loading" class="loading">Loading apps...</div>
-        
-        <div id="apps-container" class="apps-grid" style="display: none;"></div>
-        
-        <div id="error" class="error" style="display: none;"></div>
-        
-        <!-- iOS 4 style Configuration Section -->
-        <div class="config-section">
-            <h3>⚙️ Configuration</h3>
-            <p>Load apps from a JSON file.</p>
-            
-            <input type="text" id="json-url-input" class="json-input" placeholder="Enter JSON file URL (e.g., apps.json)" value="apps.json">
-            <button id="load-apps" class="ios4-button">Load Apps</button>
-        </div>
-    </div>
+  <h1>📱 Web App Store</h1>
 
-    <script>
-        // Default JSON file path
-        const DEFAULT_JSON_PATH = 'apps.json';
-        
-        let currentApps = [];
-        let currentFilter = 'all';
-        let currentJsonUrl = DEFAULT_JSON_PATH;
+  <div class="platform-buttons">
+    <button class="platform-button" onclick="setPlatform('iOS')">iOS</button>
+    <button class="platform-button" onclick="setPlatform('Android')">Android</button>
+    <button class="platform-button" onclick="setPlatform('Windows')">Windows</button>
+  </div>
 
-        // DOM elements
-        const loadingEl = document.getElementById('loading');
-        const appsContainer = document.getElementById('apps-container');
-        const errorEl = document.getElementById('error');
-        const jsonUrlInput = document.getElementById('json-url-input');
-        const loadAppsBtn = document.getElementById('load-apps');
-        const filterBtns = document.querySelectorAll('.metro-filter-btn');
+  <select id="version-select" onchange="onVersionChange()"></select>
 
-        // Initialize
-        async function init() {
-            setupEventListeners();
-            await loadAppsFromFile(DEFAULT_JSON_PATH);
+  <main class="app-list" id="app-list">Loading...</main>
+
+  <script>
+    const themeUrls = {
+      "iOS": "https://cdn.jsdelivr.net/gh/raffael/iOS.css@master/css/ios.min.css",
+      "Android": "https://cdn.jsdelivr.net/gh/ZMYaro/holo-web@master/css/holo-ics-light-elements.css",
+      "Windows": "https://cdn.metroui.org.ua/v4/css/metro-all.min.css"
+    };
+
+    const versionData = {
+      "iOS": [4, 5, 6, 7, 8, 9],
+      "Android": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "Windows": ["8.1", "10", "11"]
+    };
+
+    // Embedded app data - this replaces the need for apps.json
+    const appsData = {
+      "iOS": [
+        {
+          "name": "Safari",
+          "icon": "https://via.placeholder.com/100/007AFF/FFFFFF?text=Safari",
+          "versions": ["6", "7", "8", "9"],
+          "link": "https://apps.apple.com/us/app/safari/id1146562112"
+        },
+        {
+          "name": "Messages",
+          "icon": "https://via.placeholder.com/100/34C759/FFFFFF?text=Messages",
+          "versions": ["4", "5", "6", "7", "8", "9"],
+          "link": "https://apps.apple.com/us/app/messages/id1146560543"
+        },
+        {
+          "name": "Photos",
+          "icon": "https://via.placeholder.com/100/FF9500/FFFFFF?text=Photos",
+          "versions": ["5", "6", "7", "8", "9"],
+          "link": "https://apps.apple.com/us/app/photos/id1584215171"
+        },
+        {
+          "name": "Mail",
+          "icon": "https://via.placeholder.com/100/007AFF/FFFFFF?text=Mail",
+          "versions": ["4", "5", "6", "7", "8", "9"],
+          "link": "https://apps.apple.com/us/app/mail/id1108187098"
+        },
+        {
+          "name": "Calendar",
+          "icon": "https://via.placeholder.com/100/FF3B30/FFFFFF?text=Calendar",
+          "versions": ["6", "7", "8", "9"],
+          "link": "https://apps.apple.com/us/app/calendar/id1108185179"
+        },
+        {
+          "name": "Notes",
+          "icon": "https://via.placeholder.com/100/FFCC00/000000?text=Notes",
+          "versions": ["7", "8", "9"],
+          "link": "https://apps.apple.com/us/app/notes/id1110145109"
+        }
+      ],
+      "Android": [
+        {
+          "name": "Chrome",
+          "icon": "https://via.placeholder.com/100/4285F4/FFFFFF?text=Chrome",
+          "versions": ["4", "5", "6", "7", "8", "9", "10", "11"],
+          "link": "https://play.google.com/store/apps/details?id=com.android.chrome"
+        },
+        {
+          "name": "Gmail",
+          "icon": "https://via.placeholder.com/100/EA4335/FFFFFF?text=Gmail",
+          "versions": ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
+          "link": "https://play.google.com/store/apps/details?id=com.google.android.gm"
+        },
+        {
+          "name": "YouTube",
+          "icon": "https://via.placeholder.com/100/FF0000/FFFFFF?text=YouTube",
+          "versions": ["3", "4", "5", "6", "7", "8", "9", "10", "11"],
+          "link": "https://play.google.com/store/apps/details?id=com.google.android.youtube"
+        },
+        {
+          "name": "Maps",
+          "icon": "https://via.placeholder.com/100/34A853/FFFFFF?text=Maps",
+          "versions": ["4", "5", "6", "7", "8", "9", "10", "11"],
+          "link": "https://play.google.com/store/apps/details?id=com.google.android.apps.maps"
+        },
+        {
+          "name": "WhatsApp",
+          "icon": "https://via.placeholder.com/100/25D366/FFFFFF?text=WhatsApp",
+          "versions": ["5", "6", "7", "8", "9", "10", "11"],
+          "link": "https://play.google.com/store/apps/details?id=com.whatsapp"
+        },
+        {
+          "name": "Instagram",
+          "icon": "https://via.placeholder.com/100/E4405F/FFFFFF?text=Instagram",
+          "versions": ["6", "7", "8", "9", "10", "11"],
+          "link": "https://play.google.com/store/apps/details?id=com.instagram.android"
+        },
+        {
+          "name": "Spotify",
+          "icon": "https://via.placeholder.com/100/1DB954/FFFFFF?text=Spotify",
+          "versions": ["7", "8", "9", "10", "11"],
+          "link": "https://play.google.com/store/apps/details?id=com.spotify.music"
+        }
+      ],
+      "Windows": [
+        {
+          "name": "Microsoft Edge",
+          "icon": "https://via.placeholder.com/100/0078D4/FFFFFF?text=Edge",
+          "versions": ["10", "11"],
+          "link": "https://www.microsoft.com/en-us/edge"
+        },
+        {
+          "name": "Microsoft Store",
+          "icon": "https://via.placeholder.com/100/0078D4/FFFFFF?text=Store",
+          "versions": ["8.1", "10", "11"],
+          "link": "ms-windows-store://home"
+        },
+        {
+          "name": "Calculator",
+          "icon": "https://via.placeholder.com/100/5C2D91/FFFFFF?text=Calc",
+          "versions": ["8.1", "10", "11"],
+          "link": "ms-calculator://"
+        },
+        {
+          "name": "Mail",
+          "icon": "https://via.placeholder.com/100/0078D4/FFFFFF?text=Mail",
+          "versions": ["8.1", "10", "11"],
+          "link": "ms-outlook://compose"
+        },
+        {
+          "name": "Calendar",
+          "icon": "https://via.placeholder.com/100/107C10/FFFFFF?text=Calendar",
+          "versions": ["8.1", "10", "11"],
+          "link": "ms-calendar://"
+        },
+        {
+          "name": "Photos",
+          "icon": "https://via.placeholder.com/100/FF8C00/FFFFFF?text=Photos",
+          "versions": ["10", "11"],
+          "link": "ms-photos://"
+        },
+        {
+          "name": "Notepad",
+          "icon": "https://via.placeholder.com/100/5C2D91/FFFFFF?text=Notepad",
+          "versions": ["8.1", "10", "11"],
+          "link": "ms-settings:appsfeatures"
+        }
+      ]
+    };
+
+    let currentPlatform = "iOS";
+    let currentVersion = "9";
+
+    function setPlatform(platform) {
+      currentPlatform = platform;
+      currentVersion = versionData[platform][versionData[platform].length - 1];
+
+      document.getElementById("theme-style").href = themeUrls[platform];
+
+      document.querySelectorAll(".platform-button").forEach(btn => {
+        btn.classList.toggle("active", btn.textContent === platform);
+      });
+
+      const versionSelect = document.getElementById("version-select");
+      versionSelect.innerHTML = "";
+      versionData[platform].forEach(v => {
+        const option = document.createElement("option");
+        option.value = v;
+        option.textContent = `v${v}`;
+        if (v.toString() === currentVersion.toString()) option.selected = true;
+        versionSelect.appendChild(option);
+      });
+
+      loadApps();
+    }
+
+    function onVersionChange() {
+      currentVersion = document.getElementById("version-select").value;
+      loadApps();
+    }
+
+    async function loadApps() {
+      const appList = document.getElementById("app-list");
+      appList.innerHTML = "Loading apps...";
+
+      try {
+        // Try to load from external JSON first, fall back to embedded data
+        let data;
+        try {
+          const response = await fetch("apps.json");
+          if (response.ok) {
+            data = await response.json();
+          } else {
+            throw new Error("Failed to fetch apps.json");
+          }
+        } catch (fetchError) {
+          console.log("Using embedded app data (apps.json not found)");
+          data = appsData;
         }
 
-        // Setup event listeners
-        function setupEventListeners() {
-            // Platform filter buttons
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentFilter = btn.dataset.platform;
-                    renderApps();
-                });
-            });
+        const apps = (data[currentPlatform] || []).filter(app =>
+          app.versions.includes(currentVersion.toString())
+        );
 
-            // Load apps from URL
-            loadAppsBtn.addEventListener('click', async () => {
-                const url = jsonUrlInput.value.trim();
-                if (url) {
-                    await loadAppsFromFile(url);
-                } else {
-                    showError('Please enter a valid JSON file URL');
-                }
-            });
+        if (apps.length === 0) {
+          appList.innerHTML = `<p>No apps found for ${currentPlatform} version ${currentVersion}.</p>`;
+          return;
         }
 
-        // Load apps from external JSON file
-        async function loadAppsFromFile(url) {
-            showLoading('Loading apps from ' + url + '...');
-            
-            try {
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    console.warn('Response is not JSON, attempting to parse anyway...');
-                }
-                
-                const apps = await response.json();
-                
-                // Validate the JSON structure
-                if (!Array.isArray(apps)) {
-                    throw new Error('JSON must be an array of app objects');
-                }
-                
-                // Validate each app object
-                apps.forEach((app, index) => {
-                    if (!app.platform || !app.name || !app.version) {
-                        throw new Error(`App at index ${index} is missing required fields (platform, name, version)`);
-                    }
-                    
-                    if (!['ios', 'android', 'windows'].includes(app.platform)) {
-                        throw new Error(`Invalid platform "${app.platform}" at index ${index}. Must be ios, android, or windows`);
-                    }
-                });
-                
-                currentApps = apps;
-                currentJsonUrl = url;
-                
-                hideLoading();
-                hideError();
-                renderApps();
-                showSuccess(`Successfully loaded ${apps.length} apps from ${url}`);
-                
-            } catch (error) {
-                hideLoading();
-                showError(`Failed to load apps from ${url}: ${error.message}`);
-                console.error('Load error:', error);
-            }
-        }
+        appList.innerHTML = "";
+        apps.forEach(app => {
+          const card = document.createElement("div");
+          card.className = "app-card";
 
-        // Render apps based on current filter
-        function renderApps() {
-            const filteredApps = currentFilter === 'all' 
-                ? currentApps 
-                : currentApps.filter(app => app.platform === currentFilter);
+          const img = document.createElement("img");
+          img.src = app.icon || "https://via.placeholder.com/100?text=App";
+          img.alt = app.name;
 
-            if (filteredApps.length === 0) {
-                appsContainer.innerHTML = '<div class="loading" style="background: rgba(255,255,255,0.1);">No apps found for the selected platform.</div>';
-            } else {
-                appsContainer.innerHTML = filteredApps.map(app => createAppCard(app)).join('');
-            }
-        }
+          const name = document.createElement("p");
+          name.textContent = app.name;
 
-        // Create app card HTML with retro styling
-        function createAppCard(app) {
-            let installUrl = '';
-            let installText = 'Install';
-            let cardClass = '';
-            let iconClass = '';
-            let buttonClass = '';
-            let badgeClass = '';
-            
-            switch(app.platform) {
-                case 'ios':
-                    installUrl = app.plist_url || '#';
-                    installText = 'Install on iOS';
-                    cardClass = 'ios4-app-card';
-                    iconClass = 'ios4-icon';
-                    buttonClass = 'ios4-button';
-                    badgeClass = 'badge-ios';
-                    break;
-                case 'android':
-                    installUrl = app.apk_url || '#';
-                    installText = 'Install APK';
-                    cardClass = 'android6-app-card';
-                    iconClass = 'android6-icon';
-                    buttonClass = 'android6-button';
-                    badgeClass = 'badge-android';
-                    break;
-                case 'windows':
-                    installUrl = app.appx_url || '#';
-                    installText = 'Install on Windows';
-                    cardClass = 'metro-app-card';
-                    iconClass = 'metro-icon';
-                    buttonClass = 'metro-button';
-                    badgeClass = 'badge-windows';
-                    break;
-            }
+          const button = document.createElement("button");
+          button.textContent = "Install";
+          button.onclick = () => {
+            window.open(app.link, '_blank');
+          };
 
-            return `
-                <div class="${cardClass}">
-                    <div class="app-header">
-                        <div class="${iconClass}">${app.icon || '📦'}</div>
-                        <div class="app-info">
-                            <h3>${app.name}</h3>
-                            <div class="app-version">v${app.version} • ${app.package}</div>
-                        </div>
-                    </div>
-                    <div class="platform-badge ${badgeClass}">
-                        ${app.platform}
-                    </div>
-                    <div class="app-description">
-                        ${app.description || 'No description available.'}
-                    </div>
-                    <a href="${installUrl}" class="${buttonClass}" onclick="handleInstall(event, '${app.platform}', '${installUrl}')" style="text-decoration: none; margin-top: 12px;">
-                        ${installText}
-                    </a>
-                </div>
-            `;
-        }
+          card.appendChild(img);
+          card.appendChild(name);
+          card.appendChild(button);
+          appList.appendChild(card);
+        });
+      } catch (err) {
+        appList.innerHTML = `<p class="error-message">Error loading apps: ${err.message}</p>`;
+        console.error("Error loading apps:", err);
+      }
+    }
 
-        // Handle app installation
-        function handleInstall(event, platform, url) {
-            if (url === '#') {
-                event.preventDefault();
-                alert('Installation URL not configured for this app.');
-                return;
-            }
-
-            if (platform === 'android') {
-                event.preventDefault();
-                // For Android APK, we need to download the file
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = '';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } else if (platform === 'windows') {
-                // Windows APPX installation via ms-appinstaller protocol
-                window.location.href = url;
-            }
-            // iOS plist installation works automatically via itms-services protocol
-        }
-
-        // Show loading state
-        function showLoading(message = 'Loading...') {
-            loadingEl.textContent = message;
-            loadingEl.style.display = 'block';
-            appsContainer.style.display = 'none';
-        }
-
-        // Hide loading state
-        function hideLoading() {
-            loadingEl.style.display = 'none';
-            appsContainer.style.display = 'grid';
-        }
-
-        // Show error message
-        function showError(message) {
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
-            setTimeout(() => {
-                errorEl.style.display = 'none';
-            }, 8000);
-        }
-
-        // Hide error message
-        function hideError() {
-            errorEl.style.display = 'none';
-        }
-
-        // Show success message
-        function showSuccess(message) {
-            const successEl = document.createElement('div');
-            successEl.className = 'loading';
-            successEl.style.background = 'linear-gradient(to bottom, #51cf66 0%, #40c057 100%)';
-            successEl.style.border = '1px solid #37b24d';
-            successEl.textContent = message;
-            
-            const container = document.querySelector('.container');
-            container.insertBefore(successEl, appsContainer);
-            
-            setTimeout(() => {
-                successEl.remove();
-            }, 4000);
-        }
-
-        // Make handleInstall globally available
-        window.handleInstall = handleInstall;
-
-        // Initialize the app
-        init();
-    </script>
+    setPlatform("iOS");
+  </script>
 </body>
 </html>
