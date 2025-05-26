@@ -1,890 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Universal App Store</title>
-    
-    <style>
-        /* Reset and base styles */
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body {
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><rect width="4" height="4" fill="%23000"/><rect width="2" height="2" fill="%23111"/><rect x="2" y="2" width="2" height="2" fill="%23111"/></svg>');
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #fff;
-            font-size: 16px;
-            line-height: 1.4;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-        }
-        
-        /* iOS 4 style navigation bar - mobile optimized */
-        .ios4-navbar {
-            background: linear-gradient(to bottom, #6d84a3 0%, #4a5f7a 50%, #5577a2 51%, #6d84a3 100%);
-            border-bottom: 1px solid #2d3642;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 3px rgba(0,0,0,0.6);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .ios4-title {
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            text-shadow: 0 -1px 0 rgba(0,0,0,0.7);
-        }
-        
-        /* Main container - mobile optimized */
-        .container {
-            max-width: 100%;
-            margin: 0;
-            padding: 15px;
-        }
-        
-        /* Platform filter - mobile friendly */
-        .platform-filter {
-            display: flex;
-            justify-content: center;
-            gap: 3px;
-            margin: 15px 0;
-            flex-wrap: wrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 0 5px;
-        }
-        
-        .metro-filter-btn {
-            background: #2672ec;
-            color: white;
-            border: none;
-            padding: 12px 16px;
-            font-size: 14px;
-            font-weight: 300;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: background-color 0.2s;
-            flex-shrink: 0;
-            min-width: 80px;
-            text-align: center;
-            -webkit-appearance: none;
-            border-radius: 2px;
-        }
-        
-        .metro-filter-btn:hover,
-        .metro-filter-btn:focus {
-            background: #1c5fb8;
-            outline: none;
-        }
-        
-        .metro-filter-btn.active {
-            background: #00bcf2;
-        }
-        
-        /* Apps grid - mobile responsive */
-        .apps-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        /* App cards - mobile optimized */
-        .app-card {
-            border-radius: 8px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            color: #333;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .app-card:active {
-            transform: scale(0.98);
-        }
-        
-        /* iOS 4 style app cards */
-        .ios4-app-card {
-            background: linear-gradient(to bottom, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
-            border: 1px solid #d9d9d9;
-        }
-        
-        /* Android 6 style app cards */
-        .android6-app-card {
-            background: #fff;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.26);
-        }
-        
-        /* Windows 8 style app cards */
-        .metro-app-card {
-            background: #2672ec;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .metro-app-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        .app-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        /* Icons - mobile optimized */
-        .app-icon {
-            width: 48px;
-            height: 48px;
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .app-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .icon-fallback {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .ios4-icon {
-            border-radius: 8px;
-            background: linear-gradient(to bottom, #87ceeb 0%, #4682b4 100%);
-            border: 1px solid #2f4f4f;
-            color: white;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 3px rgba(0,0,0,0.6);
-        }
-        
-        .android6-icon {
-            border-radius: 50%;
-            background: #4CAF50;
-            color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.26);
-        }
-        
-        .metro-icon {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-        
-        .app-info {
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .app-info h3 {
-            margin: 0 0 4px 0;
-            font-size: 16px;
-            font-weight: 600;
-            word-wrap: break-word;
-        }
-        
-        .app-version {
-            font-size: 12px;
-            opacity: 0.7;
-            word-wrap: break-word;
-        }
-        
-        .app-meta {
-            font-size: 11px;
-            opacity: 0.6;
-            margin-top: 2px;
-            word-wrap: break-word;
-        }
-        
-        .app-requirements {
-            font-size: 11px;
-            opacity: 0.6;
-            margin-bottom: 8px;
-            font-style: italic;
-        }
-        
-        /* Platform badges */
-        .platform-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            font-size: 10px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            border-radius: 3px;
-        }
-        
-        .badge-ios {
-            background: linear-gradient(to bottom, #87ceeb 0%, #4682b4 100%);
-            color: white;
-            border: 1px solid #2f4f4f;
-            text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-        }
-        
-        .badge-android {
-            background: #4CAF50;
-            color: white;
-        }
-        
-        .badge-windows {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-        
-        .app-description {
-            font-size: 14px;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            word-wrap: break-word;
-        }
-        
-        /* Buttons - mobile optimized */
-        .install-button {
-            padding: 14px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-            border: none;
-            margin-top: 12px;
-            transition: all 0.2s;
-            -webkit-appearance: none;
-            border-radius: 6px;
-        }
-        
-        .install-button:active {
-            transform: scale(0.95);
-        }
-        
-        .ios4-button {
-            background: linear-gradient(to bottom, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
-            border: 1px solid #d9d9d9;
-            color: #333;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 3px rgba(0,0,0,0.3);
-            text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-        }
-        
-        .android6-button {
-            background: #2196F3;
-            color: white;
-            text-transform: uppercase;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.26);
-        }
-        
-        .metro-button {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            text-transform: uppercase;
-        }
-        
-        /* JSON Editor - mobile optimized */
-        .json-editor {
-            background: linear-gradient(to bottom, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
-            border: 1px solid #d9d9d9;
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 30px;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 3px rgba(0,0,0,0.6);
-            color: #333;
-        }
-        
-        .json-editor h3 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #333;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-        }
-        
-        .json-editor p {
-            font-size: 14px;
-            margin-bottom: 12px;
-            color: #666;
-        }
-        
-        .json-textarea {
-            width: 100%;
-            height: 120px;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 12px;
-            resize: vertical;
-            background: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2) inset;
-            -webkit-appearance: none;
-        }
-        
-        .url-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-            margin-bottom: 10px;
-            background: #fff;
-            -webkit-appearance: none;
-        }
-        
-        /* Loading and status messages */
-        .status-message {
-            text-align: center;
-            color: white;
-            font-size: 16px;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .loading {
-            background: rgba(0,0,0,0.3);
-        }
-        
-        .error {
-            background: linear-gradient(to bottom, #ff6b6b 0%, #ee5a52 100%);
-            border: 1px solid #d63031;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 1px 3px rgba(0,0,0,0.3);
-        }
-        
-        .success {
-            background: linear-gradient(to bottom, #51cf66 0%, #40c057 100%);
-            border: 1px solid #37b24d;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 1px 3px rgba(0,0,0,0.3);
-        }
-        
-        /* Tablet styles */
-        @media (min-width: 768px) {
-            .apps-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            
-            .container {
-                padding: 20px;
-            }
-            
-            .ios4-title {
-                font-size: 20px;
-            }
-        }
-        
-        /* Desktop styles */
-        @media (min-width: 1024px) {
-            .apps-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 30px;
-            }
-            
-            .platform-filter {
-                gap: 5px;
-            }
-            
-            .metro-filter-btn {
-                padding: 15px 25px;
-            }
-        }
-        
-        /* Legacy mobile device support */
-        @media (max-width: 480px) {
-            .ios4-title {
-                font-size: 16px;
-            }
-            
-            .container {
-                padding: 10px;
-            }
-            
-            .app-card {
-                padding: 12px;
-            }
-            
-            .app-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-            
-            .app-info h3 {
-                font-size: 15px;
-            }
-            
-            .app-description {
-                font-size: 13px;
-            }
-            
-            .install-button {
-                padding: 12px 16px;
-                font-size: 14px;
-            }
-            
-            .metro-filter-btn {
-                padding: 10px 12px;
-                font-size: 12px;
-                min-width: 70px;
-            }
-            
-            .json-textarea {
-                height: 100px;
-                font-size: 11px;
-            }
-        }
-        
-        /* Very small screens */
-        @media (max-width: 320px) {
-            .container {
-                padding: 8px;
-            }
-            
-            .app-header {
-                margin-bottom: 8px;
-            }
-            
-            .app-icon {
-                width: 36px;
-                height: 36px;
-                margin-right: 8px;
-                font-size: 14px;
-            }
-            
-            .metro-filter-btn {
-                padding: 8px 10px;
-                font-size: 11px;
-                min-width: 60px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Classic App Store</title>
+  <link rel="stylesheet" href="https://unpkg.com/ios.css@1.0.0/ios.min.css">
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .app {
+      border-bottom: 1px solid #ccc;
+      padding: 10px;
+      display: flex;
+    }
+    .app img {
+      width: 48px;
+      height: 48px;
+      margin-right: 10px;
+    }
+    .app-details {
+      flex: 1;
+    }
+    .install-button {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 4px 10px;
+      font-size: 14px;
+      background-color: #007aff;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+  </style>
 </head>
 <body>
-    <!-- iOS 4 style navigation bar -->
-    <div class="ios4-navbar">
-        <div class="ios4-title">📱 Universal App Store</div>
-    </div>
-    
-    <div class="container">
-        <!-- Platform filter -->
-        <div class="platform-filter">
-            <button class="metro-filter-btn active" data-platform="all">All</button>
-            <button class="metro-filter-btn" data-platform="ios">iOS</button>
-            <button class="metro-filter-btn" data-platform="android">Android</button>
-            <button class="metro-filter-btn" data-platform="windows">Windows</button>
-        </div>
-        
-        <div id="loading" class="status-message loading">Loading apps...</div>
-        
-        <div id="apps-container" class="apps-grid" style="display: none;"></div>
-        
-        <div id="error" class="status-message error" style="display: none;"></div>
-        
-        <!-- JSON Configuration -->
-        <div class="json-editor">
-            <h3>📝 App Configuration</h3>
-            <p>Load apps from external JSON URL or edit manually:</p>
-            
-            <input type="url" id="json-url" class="url-input" placeholder="https://example.com/apps.json">
-            <button id="load-json" class="install-button ios4-button">Load from URL</button>
-            
-            <textarea id="json-input" class="json-textarea" placeholder="Or paste/edit JSON configuration here..."></textarea>
-            <button id="update-apps" class="install-button ios4-button">Update Apps</button>
-        </div>
-    </div>
+  <div class="toolbar">
+    <h1>App Store</h1>
+  </div>
+  <div id="app-list" class="content">
+    <p>Loading apps...</p>
+  </div>
 
-    <script>
-        // Global variables
-        let currentApps = [];
-        let currentFilter = 'all';
-        
-        // DOM elements
-        const loadingEl = document.getElementById('loading');
-        const appsContainer = document.getElementById('apps-container');
-        const errorEl = document.getElementById('error');
-        const jsonInput = document.getElementById('json-input');
-        const jsonUrlInput = document.getElementById('json-url');
-        const updateBtn = document.getElementById('update-apps');
-        const loadJsonBtn = document.getElementById('load-json');
-        const filterBtns = document.querySelectorAll('.metro-filter-btn');
+  <script>
+    fetch('apps.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('app-list');
+        container.innerHTML = '';
 
-        // Sample apps for fallback
-        const sampleApps = [
-            {
-                "platform": "ios",
-                "name": "TaskMaster Pro",
-                "version": "3.2.1",
-                "package": "com.productivity.taskmaster",
-                "description": "Professional task management app with advanced project tracking and team collaboration.",
-                "plist_url": "itms-services://?action=download-manifest&url=https://example.com/taskmaster.plist",
-                "icon": "https://via.placeholder.com/48x48/4A90E2/FFFFFF?text=TM",
-                "category": "Productivity",
-                "size": "45.2 MB",
-                "requirements": "iOS 12.0+",
-                "developer": "Productivity Solutions Inc."
-            },
-            {
-                "platform": "android",
-                "name": "PhotoCraft Mobile",
-                "version": "2.7.9",
-                "package": "com.creative.photocraft.mobile",
-                "description": "Powerful photo editing app with GPU acceleration and cloud storage integration.",
-                "apk_url": "https://example.com/photocraft.apk",
-                "icon": "https://via.placeholder.com/48x48/E74C3C/FFFFFF?text=PC",
-                "category": "Photography",
-                "size": "89.2 MB",
-                "requirements": "Android 8.0+",
-                "developer": "Creative Labs Studio"
-            },
-            {
-                "platform": "windows",
-                "name": "CodeEditor Studio",
-                "version": "5.2.1",
-                "package": "com.dev.codeeditor.studio",
-                "description": "Full-featured development environment with debugging tools and integrated version control.",
-                "appx_url": "ms-appinstaller:?source=https://example.com/codeeditor.appx",
-                "icon": "https://via.placeholder.com/48x48/9B59B6/FFFFFF?text=CE",
-                "category": "Developer Tools",
-                "size": "156.2 MB",
-                "requirements": "Windows 11+",
-                "developer": "DevTools Inc."
-            }
-        ];
+        data.forEach(app => {
+          const appDiv = document.createElement('div');
+          appDiv.className = 'app';
 
-        // Initialize app
-        function init() {
-            setupEventListeners();
-            
-            // Try to load from default URL or use sample data
-            const defaultUrl = jsonUrlInput.value || getDefaultJsonUrl();
-            if (defaultUrl) {
-                loadFromUrl(defaultUrl);
-            } else {
-                loadSampleData();
-            }
-        }
+          const icon = document.createElement('img');
+          icon.src = app.icon;
 
-        // Get default JSON URL (you can customize this)
-        function getDefaultJsonUrl() {
-            // Check URL parameters for JSON URL
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('json') || '';
-        }
+          const details = document.createElement('div');
+          details.className = 'app-details';
 
-        // Setup event listeners
-        function setupEventListeners() {
-            // Platform filter buttons
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilter = this.dataset.platform;
-                    renderApps();
-                });
-            });
+          const title = document.createElement('strong');
+          title.textContent = app.name + ' v' + app.version;
 
-            // Buttons
-            updateBtn.addEventListener('click', updateAppsFromJson);
-            loadJsonBtn.addEventListener('click', function() {
-                const url = jsonUrlInput.value.trim();
-                if (url) {
-                    loadFromUrl(url);
-                } else {
-                    showError('Please enter a valid URL');
-                }
-            });
+          const desc = document.createElement('p');
+          desc.textContent = app.description;
 
-            // Auto-resize textarea
-            jsonInput.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.max(120, this.scrollHeight) + 'px';
-            });
-        }
+          const info = document.createElement('p');
+          info.textContent = `Size: ${app.size} | Requires: ${app.requirements}`;
 
-        // Load apps from external JSON URL
-        function loadFromUrl(url) {
-            showLoading('Loading apps from URL...');
-            
-            // Use JSONP or CORS proxy for cross-origin requests
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    processJsonData(data);
-                    showSuccess('Apps loaded successfully from URL!');
-                })
-                .catch(error => {
-                    console.error('Error loading JSON:', error);
-                    showError(`Failed to load from URL: ${error.message}. Using sample data.`);
-                    loadSampleData();
-                });
-        }
+          const installLink = document.createElement('a');
+          installLink.className = 'install-button';
 
-        // Load sample data
-        function loadSampleData() {
-            currentApps = [...sampleApps];
-            jsonInput.value = JSON.stringify(currentApps, null, 2);
-            hideLoading();
-            renderApps();
-        }
+          if (app.platform === 'ios') {
+            installLink.href = app.plist_url;
+          } else if (app.platform === 'android') {
+            installLink.href = app.apk_url;
+          } else if (app.platform === 'windows') {
+            installLink.href = app.appx_url;
+          }
 
-        // Process JSON data
-        function processJsonData(data) {
-            try {
-                // Handle different JSON structures
-                let apps = Array.isArray(data) ? data : data.apps || data;
-                
-                if (!Array.isArray(apps)) {
-                    throw new Error('Invalid JSON structure: expected array of apps');
-                }
+          installLink.textContent = 'Install';
 
-                validateApps(apps);
-                currentApps = apps;
-                jsonInput.value = JSON.stringify(currentApps, null, 2);
-                hideLoading();
-                renderApps();
-                
-            } catch (error) {
-                showError(`Invalid JSON data: ${error.message}`);
-                loadSampleData();
-            }
-        }
+          details.appendChild(title);
+          details.appendChild(desc);
+          details.appendChild(info);
+          details.appendChild(installLink);
 
-        // Validate apps structure
-        function validateApps(apps) {
-            apps.forEach((app, index) => {
-                if (!app.platform || !app.name || !app.version) {
-                    throw new Error(`App at index ${index} missing required fields (platform, name, version)`);
-                }
-                
-                if (!['ios', 'android', 'windows'].includes(app.platform)) {
-                    throw new Error(`Invalid platform "${app.platform}" at index ${index}`);
-                }
-            });
-        }
-
-        // Update apps from JSON textarea
-        function updateAppsFromJson() {
-            try {
-                const newApps = JSON.parse(jsonInput.value);
-                validateApps(newApps);
-                currentApps = newApps;
-                renderApps();
-                showSuccess('Apps updated successfully!');
-            } catch (error) {
-                showError(`Invalid JSON: ${error.message}`);
-            }
-        }
-
-        // Render apps
-        function renderApps() {
-            const filteredApps = currentFilter === 'all' 
-                ? currentApps 
-                : currentApps.filter(app => app.platform === currentFilter);
-
-            if (filteredApps.length === 0) {
-                appsContainer.innerHTML = '<div class="status-message">No apps found for selected platform.</div>';
-            } else {
-                appsContainer.innerHTML = filteredApps.map(app => createAppCard(app)).join('');
-            }
-            
-            appsContainer.style.display = 'grid';
-        }
-
-        // Create app card HTML
-        function createAppCard(app) {
-            let installUrl = '';
-            let installText = 'Install';
-            let cardClass = 'app-card';
-            let iconClass = 'app-icon';
-            let buttonClass = 'install-button';
-            let badgeClass = '';
-            
-            switch(app.platform) {
-                case 'ios':
-                    installUrl = app.plist_url || '#';
-                    installText = 'Install on iOS';
-                    cardClass += ' ios4-app-card';
-                    iconClass += ' ios4-icon';
-                    buttonClass += ' ios4-button';
-                    badgeClass = 'badge-ios';
-                    break;
-                case 'android':
-                    installUrl = app.apk_url || '#';
-                    installText = 'Install APK';
-                    cardClass += ' android6-app-card';
-                    iconClass += ' android6-icon';
-                    buttonClass += ' android6-button';
-                    badgeClass = 'badge-android';
-                    break;
-                case 'windows':
-                    installUrl = app.appx_url || '#';
-                    installText = 'Install';
-                    cardClass += ' metro-app-card';
-                    iconClass += ' metro-icon';
-                    buttonClass += ' metro-button';
-                    badgeClass = 'badge-windows';
-                    break;
-            }
-
-            // Create icon HTML - support both image URLs and emoji fallback
-            const iconHtml = app.icon && (app.icon.startsWith('http') || app.icon.startsWith('data:')) 
-                ? `<img src="${escapeHtml(app.icon)}" alt="${escapeHtml(app.name)} icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                   <div class="icon-fallback" style="display:none;">📦</div>`
-                : `<div class="icon-fallback">${app.icon || '📦'}</div>`;
-
-            // Additional app info
-            const additionalInfo = [];
-            if (app.category) additionalInfo.push(escapeHtml(app.category));
-            if (app.size) additionalInfo.push(escapeHtml(app.size));
-            if (app.developer) additionalInfo.push(`by ${escapeHtml(app.developer)}`);
-
-            return `
-                <div class="${cardClass}">
-                    <div class="app-header">
-                        <div class="${iconClass}">
-                            ${iconHtml}
-                        </div>
-                        <div class="app-info">
-                            <h3>${escapeHtml(app.name)}</h3>
-                            <div class="app-version">v${escapeHtml(app.version)} • ${escapeHtml(app.package || 'N/A')}</div>
-                            ${additionalInfo.length > 0 ? `<div class="app-meta">${additionalInfo.join(' • ')}</div>` : ''}
-                        </div>
-                    </div>
-                    <div class="platform-badge ${badgeClass}">
-                        ${app.platform.toLowerCase()}
-                    </div>
-                    <div class="app-description">
-                        ${escapeHtml(app.description || 'No description available.')}
-                    </div>
-                    ${app.requirements ? `<div class="app-requirements">Requires: ${escapeHtml(app.requirements)}</div>` : ''}
-                    <button class="${buttonClass}" onclick="handleInstall('${app.platform}', '${installUrl}', '${escapeHtml(app.name)}')">
-                        ${installText}
-                    </button>
-                </div>
-            `;
-        }
-
-        // Handle app installation
-        function handleInstall(platform, url, appName) {
-            if (url === '#' || !url) {
-                showError(`Installation URL not configured for ${appName}`);
-                return;
-            }
-
-            try {
-                if (platform === 'android') {
-                    // Create download link for APK
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = '';
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showSuccess(`Downloading ${appName}...`);
-                } else {
-                    // Direct navigation for iOS plist and Windows appx
-                    window.location.href = url;
-                }
-            } catch (error) {
-                showError(`Failed to install ${appName}: ${error.message}`);
-            }
-        }
-
-        // Utility functions
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function showLoading(message = 'Loading...') {
-            loadingEl.textContent = message;
-            loadingEl.style.display = 'block';
-            appsContainer.style.display = 'none';
-        }
-
-        function hideLoading() {
-            loadingEl.style.display = 'none';
-            appsContainer.style.display = 'grid';
-        }
-
-        function showError(message) {
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
-            setTimeout(() => {
-                errorEl.style.display = 'none';
-            }, 5000);
-        }
-
-        function showSuccess(message) {
-            const successEl = document.createElement('div');
-            successEl.className = 'status-message success';
-            successEl.textContent = message;
-            
-            const container = document.querySelector('.container');
-            container.insertBefore(successEl, appsContainer);
-            
-            setTimeout(() => {
-                if (successEl.parentNode) {
-                    successEl.remove();
-                }
-            }, 3000);
-        }
-
-        // Make functions globally available
-        window.handleInstall = handleInstall;
-
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-    </script>
+          appDiv.appendChild(icon);
+          appDiv.appendChild(details);
+          container.appendChild(appDiv);
+        });
+      })
+      .catch(err => {
+        document.getElementById('app-list').innerHTML = '<p>Error loading app list.</p>';
+        console.error(err);
+      });
+  </script>
 </body>
 </html>
