@@ -12,6 +12,20 @@
     "requirements": "iOS 5.0+",
     "developer": "Mojang Studios"
   },
+  [
+  {
+    "platform": "ios",
+    "name": "Discord Classic",
+    "version": "1.9",
+    "package": "com.hammerandchisel.discord",
+    "description": "discord",
+    "plist_url": "itms-services://?action=download-manifest&url=plists/discord.plist",
+    "icon": "https://i.pinimg.com/736x/d8/89/bc/d889bc64b9e18e0faafbaab5430ee8a5.jpg",
+    "category": "Social Media",
+    "size": "49.2 MB",
+    "requirements": "iOS 5.0+",
+    "developer": "Discord Inc."
+  },
   {
     "platform": "android",
     "name": "PhotoCraft Mobile",
