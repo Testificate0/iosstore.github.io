@@ -105,15 +105,15 @@
   },
   {
     "platform": "windows",
-    "name": "CodeEditor Studio",
+    "name": "Vine",
     "version": "5.2.1",
     "package": "com.dev.codeeditor.studio",
-    "description": "Full-featured development environment with debugging tools and integrated version control.",
-    "appx_url": "ms-appinstaller:?source=https://archive.org/download/apparchive/codeeditor.appx",
-    "icon": "https://via.placeholder.com/48x48/9B59B6/FFFFFF?text=CE",
-    "category": "Developer Tools",
+    "description": "Vine",
+    "appx_url": "ms-appinstaller:?source=https://files.catbox.moe/ht0c5m.appx",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Vine_logo.svg",
+    "category": "Social Media",
     "size": "156.2 MB",
-    "requirements": "Windows 11+",
-    "developer": "DevTools Inc."
+    "requirements": "Windows 8.1+",
+    "developer": "Vine Inc."
   }
 ]
