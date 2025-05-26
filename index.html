@@ -112,73 +112,91 @@
     <p>Loading apps...</p>
   </div>
 
-  <script>
-    let allApps = [];
+<script>
+  var allApps = [];
 
-    function filterApps(platform) {
-      const container = document.getElementById('app-list');
-      container.innerHTML = '';
+  function filterApps(platform) {
+    var container = document.getElementById('app-list');
+    container.innerHTML = '';
 
-      const filtered = platform === 'all' ? allApps : allApps.filter(app => app.platform === platform);
+    var filtered = platform === 'all' ? allApps : allApps.filter(function(app) {
+      return app.platform === platform;
+    });
 
-      if (filtered.length === 0) {
-        container.innerHTML = '<p>No apps available for this platform.</p>';
-        return;
-      }
-
-      filtered.forEach(app => {
-        const appDiv = document.createElement('div');
-        appDiv.className = 'app';
-
-        const icon = document.createElement('img');
-        icon.src = app.icon;
-
-        const details = document.createElement('div');
-        details.className = 'app-details';
-
-        const title = document.createElement('strong');
-        title.textContent = app.name + ' v' + app.version;
-
-        const desc = document.createElement('p');
-        desc.textContent = app.description;
-
-        const info = document.createElement('p');
-        info.textContent = `Size: ${app.size} | Requires: ${app.requirements}`;
-
-        const installLink = document.createElement('a');
-        installLink.className = 'install-button';
-
-        if (app.platform === 'ios') {
-          installLink.href = app.plist_url;
-        } else if (app.platform === 'android') {
-          installLink.href = app.apk_url;
-        } else if (app.platform === 'windows') {
-          installLink.href = app.appx_url;
-        }
-
-        installLink.textContent = 'Install';
-
-        details.appendChild(title);
-        details.appendChild(desc);
-        details.appendChild(info);
-        details.appendChild(installLink);
-
-        appDiv.appendChild(icon);
-        appDiv.appendChild(details);
-        container.appendChild(appDiv);
-      });
+    if (filtered.length === 0) {
+      container.innerHTML = '<p>No apps available for this platform.</p>';
+      return;
     }
 
-    fetch('apps.json')
-      .then(response => response.json())
-      .then(data => {
-        allApps = data;
-        filterApps('all');
-      })
-      .catch(err => {
-        document.getElementById('app-list').innerHTML = '<p>Error loading app list.</p>';
-        console.error(err);
-      });
-  </script>
+    for (var i = 0; i < filtered.length; i++) {
+      var app = filtered[i];
+
+      var appDiv = document.createElement('div');
+      appDiv.className = 'app';
+
+      var icon = document.createElement('img');
+      icon.src = app.icon;
+
+      var details = document.createElement('div');
+      details.className = 'app-details';
+
+      var title = document.createElement('strong');
+      title.innerText = app.name + ' v' + app.version;
+
+      var desc = document.createElement('p');
+      desc.innerText = app.description;
+
+      var info = document.createElement('p');
+      info.innerText = 'Size: ' + app.size + ' | Requires: ' + app.requirements;
+
+      var installLink = document.createElement('a');
+      installLink.className = 'install-button';
+
+      if (app.platform === 'ios') {
+        installLink.href = app.plist_url;
+      } else if (app.platform === 'android') {
+        installLink.href = app.apk_url;
+      } else if (app.platform === 'windows') {
+        installLink.href = app.appx_url;
+      }
+
+      installLink.innerText = 'Install';
+
+      details.appendChild(title);
+      details.appendChild(desc);
+      details.appendChild(info);
+      details.appendChild(installLink);
+
+      appDiv.appendChild(icon);
+      appDiv.appendChild(details);
+      container.appendChild(appDiv);
+    }
+  }
+
+  // Use XMLHttpRequest instead of fetch
+  function loadApps() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'apps.json', true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          try {
+            allApps = JSON.parse(xhr.responseText);
+            filterApps('all');
+          } catch (e) {
+            document.getElementById('app-list').innerHTML = '<p>Error parsing app list.</p>';
+            console.log(e);
+          }
+        } else {
+          document.getElementById('app-list').innerHTML = '<p>Error loading app list.</p>';
+          console.log('HTTP error: ' + xhr.status);
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  loadApps();
+</script>
 </body>
 </html>
