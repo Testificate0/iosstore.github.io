@@ -5,7 +5,7 @@
     "version": "0.10.0",
     "package": "com.mojang.minecraftpe",
     "description": "Minecraft, you should already know this.",
-    "plist_url": "itms-services://?action=download-manifest&url=https://archive.org/download/apparchive/IOS/minecraft.ipa",
+    "plist_url": "itms-services://?action=download-manifest&url=https://archive.org/download/apparchive/Plists/minecraft.plist",
     "icon": "https://i.pinimg.com/736x/06/61/3a/06613a867196ed6cbec45a736936647b.jpg",
     "category": "Gaming",
     "size": "17.1 MB",
