@@ -3,94 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <title>Classic App Store</title>
-  <link rel="stylesheet" href="https://unpkg.com/ios.css@1.0.0/ios.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Embedded iOS 4-style CSS -->
   <style>
     body {
-      background-color: white;
-      color: black;
+      background-color: #f0f0f0;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
-    .app {
+    .toolbar {
+      background: -webkit-gradient(linear, left top, left bottom, from(#d8d8d8), to(#b3b3b3));
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #999;
+    }
+    .toolbar h1 {
+      margin: 0;
+      font-size: 20px;
+      color: #000;
+    }
+
+    .platform-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background-color: #fff;
       border-bottom: 1px solid #ccc;
+    }
+    .platform-buttons button {
+      margin: 5px;
+      padding: 8px 12px;
+      background: #dcdcdc;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .content {
+      padding: 10px;
+    }
+
+    .app {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
       padding: 10px;
       display: flex;
+      margin-bottom: 10px;
     }
+
     .app img {
       width: 48px;
       height: 48px;
       margin-right: 10px;
+      border-radius: 10px;
     }
+
     .app-details {
       flex: 1;
     }
+
+    .app-details p {
+      margin: 4px 0;
+    }
+
     .install-button {
       display: inline-block;
-      margin-top: 5px;
-      padding: 4px 10px;
+      margin-top: 6px;
+      padding: 6px 12px;
       font-size: 14px;
       background-color: #007aff;
       color: white;
       text-decoration: none;
-      border-radius: 4px;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .app img {
+        margin-bottom: 10px;
+      }
+      .install-button {
+        margin-top: 10px;
+      }
     }
   </style>
 </head>
 <body>
+
   <div class="toolbar">
-    <h1>App Store</h1>
+    <h1>Classic App Store</h1>
   </div>
+
+  <div class="platform-buttons">
+    <button onclick="filterApps('all')">All</button>
+    <button onclick="filterApps('ios')">iOS</button>
+    <button onclick="filterApps('android')">Android</button>
+    <button onclick="filterApps('windows')">Windows</button>
+  </div>
+
   <div id="app-list" class="content">
     <p>Loading apps...</p>
   </div>
 
   <script>
+    let allApps = [];
+
+    function filterApps(platform) {
+      const container = document.getElementById('app-list');
+      container.innerHTML = '';
+
+      const filtered = platform === 'all' ? allApps : allApps.filter(app => app.platform === platform);
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p>No apps available for this platform.</p>';
+        return;
+      }
+
+      filtered.forEach(app => {
+        const appDiv = document.createElement('div');
+        appDiv.className = 'app';
+
+        const icon = document.createElement('img');
+        icon.src = app.icon;
+
+        const details = document.createElement('div');
+        details.className = 'app-details';
+
+        const title = document.createElement('strong');
+        title.textContent = app.name + ' v' + app.version;
+
+        const desc = document.createElement('p');
+        desc.textContent = app.description;
+
+        const info = document.createElement('p');
+        info.textContent = `Size: ${app.size} | Requires: ${app.requirements}`;
+
+        const installLink = document.createElement('a');
+        installLink.className = 'install-button';
+
+        if (app.platform === 'ios') {
+          installLink.href = app.plist_url;
+        } else if (app.platform === 'android') {
+          installLink.href = app.apk_url;
+        } else if (app.platform === 'windows') {
+          installLink.href = app.appx_url;
+        }
+
+        installLink.textContent = 'Install';
+
+        details.appendChild(title);
+        details.appendChild(desc);
+        details.appendChild(info);
+        details.appendChild(installLink);
+
+        appDiv.appendChild(icon);
+        appDiv.appendChild(details);
+        container.appendChild(appDiv);
+      });
+    }
+
     fetch('apps.json')
       .then(response => response.json())
       .then(data => {
-        const container = document.getElementById('app-list');
-        container.innerHTML = '';
-
-        data.forEach(app => {
-          const appDiv = document.createElement('div');
-          appDiv.className = 'app';
-
-          const icon = document.createElement('img');
-          icon.src = app.icon;
-
-          const details = document.createElement('div');
-          details.className = 'app-details';
-
-          const title = document.createElement('strong');
-          title.textContent = app.name + ' v' + app.version;
-
-          const desc = document.createElement('p');
-          desc.textContent = app.description;
-
-          const info = document.createElement('p');
-          info.textContent = `Size: ${app.size} | Requires: ${app.requirements}`;
-
-          const installLink = document.createElement('a');
-          installLink.className = 'install-button';
-
-          if (app.platform === 'ios') {
-            installLink.href = app.plist_url;
-          } else if (app.platform === 'android') {
-            installLink.href = app.apk_url;
-          } else if (app.platform === 'windows') {
-            installLink.href = app.appx_url;
-          }
-
-          installLink.textContent = 'Install';
-
-          details.appendChild(title);
-          details.appendChild(desc);
-          details.appendChild(info);
-          details.appendChild(installLink);
-
-          appDiv.appendChild(icon);
-          appDiv.appendChild(details);
-          container.appendChild(appDiv);
-        });
+        allApps = data;
+        filterApps('all');
       })
       .catch(err => {
         document.getElementById('app-list').innerHTML = '<p>Error loading app list.</p>';
