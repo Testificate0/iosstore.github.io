@@ -14,6 +14,19 @@
   },
   {
     "platform": "ios",
+    "name": "Doodle Jump",
+    "version": "0.10.0",
+    "package": "com.test.doodlejump",
+    "description": "Doodle jump, you should already know this.",
+    "plist_url": "itms-services://?action=download-manifest&url=https://files.catbox.moe/nbbe5q.ipa",
+    "icon": "https://i.pinimg.com/736x/06/61/3a/06613a867196ed6cbec45a736936647b.jpg",
+    "category": "Gaming",
+    "size": "17.1 MB",
+    "requirements": "iOS 5.0+",
+    "developer": "Mojang Studios"
+  },
+  {
+    "platform": "ios",
     "name": "Discord Classic",
     "version": "1.9",
     "package": "com.hammerandchisel.discord",
