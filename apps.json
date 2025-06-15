@@ -104,6 +104,58 @@
     "developer": "Vine Inc."
   },
   {
+    "platform": "ios",
+    "name": "novarin2013",
+    "version": "5.3.0?",
+    "package": "",
+    "description": "",
+    "plist_url": "itms-services://?action=download-manifest&url=https://files.catbox.moe/nvdnni.plist",
+    "icon": "https://novarin.cc/img/finnobe3logo.png",
+    "category": "Social Media",
+    "size": "49.2 MB",
+    "requirements": "iOS 5.0+",
+    "developer": "Vine Inc."
+  },
+  {
+    "platform": "ios",
+    "name": "novarin2015",
+    "version": "5.3.0?",
+    "package": "",
+    "description": "",
+    "plist_url": "itms-services://?action=download-manifest&url=https://files.catbox.moe/nvdnni.plist",
+    "icon": "https://novarin.cc/img/finnobe3logo.png",
+    "category": "Social Media",
+    "size": "49.2 MB",
+    "requirements": "iOS 5.0+",
+    "developer": "Vine Inc."
+  },
+  {
+    "platform": "ios",
+    "name": "novarin2016",
+    "version": "5.3.0?",
+    "package": "",
+    "description": "",
+    "plist_url": "itms-services://?action=download-manifest&url=https://files.catbox.moe/2rpald.plist",
+    "icon": "https://novarin.cc/img/finnobe3logo.png",
+    "category": "Social Media",
+    "size": "49.2 MB",
+    "requirements": "iOS 5.0+",
+    "developer": "Vine Inc."
+  },
+  {
+    "platform": "ios",
+    "name": "novarin2018",
+    "version": "5.3.0?",
+    "package": "",
+    "description": "",
+    "plist_url": "itms-services://?action=download-manifest&url=https://files.catbox.moe/igk0el.plist",
+    "icon": "https://novarin.cc/img/finnobe3logo.png",
+    "category": "Social Media",
+    "size": "49.2 MB",
+    "requirements": "iOS 5.0+",
+    "developer": "Vine Inc."
+  },
+  {
     "platform": "android",
     "name": "PhotoCraft Mobile",
     "version": "2.7.9",
